@@ -1,0 +1,7 @@
+.terraform*
+.env*
+secrets.yaml
+key.txt
+terraform.tfstate*
+kubeconfig
+talos-config

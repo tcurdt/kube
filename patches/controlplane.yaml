@@ -1,0 +1,12 @@
+cluster:
+  network:
+    cni:
+      name: flannel
+  proxy:
+    disabled: true
+machine:
+  network:
+    interfaces:
+      - interface: eth1
+        addresses:
+          - 10.0.1.2/24

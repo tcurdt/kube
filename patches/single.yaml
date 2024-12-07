@@ -1,0 +1,18 @@
+cluster:
+  network:
+    cni:
+      name: flannel
+  proxy:
+    disabled: true
+machine:
+  network:
+    interfaces:
+      - interface: eth1
+        addresses:
+          - 10.0.1.2/24
+  kubelet:
+    extraArgs:
+      node-labels: "node-role.kubernetes.io/control-plane=,node-role.kubernetes.io/worker="
+    nodeIP:
+      validSubnets:
+        - "10.0.1.0/24"

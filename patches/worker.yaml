@@ -1,0 +1,9 @@
+cluster:
+  network:
+    cni:
+      name: flannel
+machine:
+  network:
+    interfaces:
+      - interface: eth1
+        dhcp: true
