@@ -3,7 +3,7 @@ cluster:
     cni:
       name: flannel
   proxy:
-    disabled: true
+    disabled: false
 machine:
   network:
     interfaces:

@@ -43,14 +43,10 @@ variable "email" {
   type = string
 }
 
-variable "github_owner" {
-  type = string
-}
-
 variable "flux_repository" {
   type = string
+  # full url to the git repository
 }
-
 
 locals {
   is_single_node = length(var.control_plane_nodes) == 1 && length(var.worker_nodes) == 0
