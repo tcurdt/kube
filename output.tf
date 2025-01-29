@@ -9,43 +9,43 @@ output "nodes" {
   }
 }
 
-output "s3_versions_buckets" {
+output "s3_storage_buckets" {
   value = {
-    for key in var.s3_versions_buckets :
-    "${key}" => aws_s3_bucket.s3_versions_bucket[key].arn
+    for key in var.s3_storage_buckets :
+    "${key}" => aws_s3_bucket.s3_storage_bucket[key].arn
   }
 }
 
-output "s3_versions_user" {
-  value = aws_iam_user.s3_versions_user.name
+output "s3_storage_user" {
+  value = aws_iam_user.s3_storage_user.name
 }
 
-output "s3_versions_key_id" {
-  value = nonsensitive(aws_iam_access_key.s3_versions_key.id)
+output "s3_storage_key_id" {
+  value = nonsensitive(aws_iam_access_key.s3_storage_key.id)
 }
 
-output "s3_versions_key_secret" {
-  value = nonsensitive(aws_iam_access_key.s3_versions_key.secret)
+output "s3_storage_key_secret" {
+  value = nonsensitive(aws_iam_access_key.s3_storage_key.secret)
 }
 
 
-output "s3_expires_buckets" {
+output "s3_backup_buckets" {
   value = {
-    for key in var.s3_expires_buckets :
-    "${key}" => aws_s3_bucket.s3_expires_bucket[key].arn
+    for key in var.s3_backup_buckets :
+    "${key}" => aws_s3_bucket.s3_backup_bucket[key].arn
   }
 }
 
-output "s3_expires_user" {
-  value = aws_iam_user.s3_expires_user.name
+output "s3_backup_user" {
+  value = aws_iam_user.s3_backup_user.name
 }
 
-output "s3_expires_key_id" {
-  value = nonsensitive(aws_iam_access_key.s3_expires_key.id)
+output "s3_backup_key_id" {
+  value = nonsensitive(aws_iam_access_key.s3_backup_key.id)
 }
 
-output "s3_expires_key_secret" {
-  value = nonsensitive(aws_iam_access_key.s3_expires_key.secret)
+output "s3_backup_key_secret" {
+  value = nonsensitive(aws_iam_access_key.s3_backup_key.secret)
 }
 
 

@@ -1,14 +1,14 @@
-resource "aws_iam_user" "s3_versions_user" {
+resource "aws_iam_user" "s3_storage_user" {
   name          = "s3-versions-user"
   force_destroy = true
 }
 
-resource "aws_iam_access_key" "s3_versions_key" {
-  user = aws_iam_user.s3_versions_user.name
+resource "aws_iam_access_key" "s3_storage_key" {
+  user = aws_iam_user.s3_storage_user.name
 }
 
-resource "aws_s3_bucket" "s3_versions_bucket" {
-  for_each      = toset(var.s3_versions_buckets)
+resource "aws_s3_bucket" "s3_storage_bucket" {
+  for_each      = toset(var.s3_storage_buckets)
   bucket        = each.key
   force_destroy = true
 }
@@ -22,10 +22,10 @@ resource "aws_s3_bucket" "s3_versions_bucket" {
 #   acl = "private"
 # }
 
-resource "aws_s3_bucket_lifecycle_configuration" "s3_versions_bucket_lifecycle" {
-  for_each = toset(var.s3_versions_buckets)
+resource "aws_s3_bucket_lifecycle_configuration" "s3_storage_bucket_lifecycle" {
+  for_each = toset(var.s3_storage_buckets)
 
-  bucket = aws_s3_bucket.s3_versions_bucket[each.key].id
+  bucket = aws_s3_bucket.s3_storage_bucket[each.key].id
 
   rule {
     id     = "expire"
@@ -38,7 +38,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "s3_versions_bucket_lifecycle" 
     #     }
 
     expiration {
-      days = var.s3_versions_keep_days
+      days = var.s3_storage_keep_days
     }
 
     # noncurrent_version_expiration {
@@ -47,10 +47,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "s3_versions_bucket_lifecycle" 
   }
 }
 
-resource "aws_s3_bucket_versioning" "s3_versions_bucket_versioning" {
-  for_each = toset(var.s3_versions_buckets)
+resource "aws_s3_bucket_versioning" "s3_storage_bucket_versioning" {
+  for_each = toset(var.s3_storage_buckets)
 
-  bucket = aws_s3_bucket.s3_versions_bucket[each.key].id
+  bucket = aws_s3_bucket.s3_storage_bucket[each.key].id
 
   versioning_configuration {
     status = "Enabled"
@@ -58,10 +58,10 @@ resource "aws_s3_bucket_versioning" "s3_versions_bucket_versioning" {
   }
 }
 
-resource "aws_s3_bucket_public_access_block" "s3_versions_bucket_public_access_block" {
-  for_each = toset(var.s3_versions_buckets)
+resource "aws_s3_bucket_public_access_block" "s3_storage_bucket_public_access_block" {
+  for_each = toset(var.s3_storage_buckets)
 
-  bucket = aws_s3_bucket.s3_versions_bucket[each.key].id
+  bucket = aws_s3_bucket.s3_storage_bucket[each.key].id
 
   block_public_acls       = true
   block_public_policy     = true
@@ -69,25 +69,25 @@ resource "aws_s3_bucket_public_access_block" "s3_versions_bucket_public_access_b
   restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket_ownership_controls" "s3_versions_bucket_ownership" {
-  for_each = toset(var.s3_versions_buckets)
+resource "aws_s3_bucket_ownership_controls" "s3_storage_bucket_ownership" {
+  for_each = toset(var.s3_storage_buckets)
 
-  bucket = aws_s3_bucket.s3_versions_bucket[each.key].id
+  bucket = aws_s3_bucket.s3_storage_bucket[each.key].id
 
   rule {
     object_ownership = "BucketOwnerPreferred"
   }
 }
 
-resource "aws_iam_user_policy_attachment" "s3_versions_bucket_policy_attachment" {
-  for_each = toset(var.s3_versions_buckets)
+resource "aws_iam_user_policy_attachment" "s3_storage_bucket_policy_attachment" {
+  for_each = toset(var.s3_storage_buckets)
 
-  user       = aws_iam_user.s3_versions_user.name
-  policy_arn = aws_iam_policy.s3_versions_bucket_policy[each.key].arn
+  user       = aws_iam_user.s3_storage_user.name
+  policy_arn = aws_iam_policy.s3_storage_bucket_policy[each.key].arn
 }
 
-resource "aws_iam_policy" "s3_versions_bucket_policy" {
-  for_each = toset(var.s3_versions_buckets)
+resource "aws_iam_policy" "s3_storage_bucket_policy" {
+  for_each = toset(var.s3_storage_buckets)
 
   name        = "bucket_policy"
   description = "policy for accessing the S3 bucket"
@@ -102,8 +102,8 @@ resource "aws_iam_policy" "s3_versions_bucket_policy" {
         "s3:ListBucket"
       ],
       Resource = [
-        aws_s3_bucket.s3_versions_bucket[each.key].arn,
-        "${aws_s3_bucket.s3_versions_bucket[each.key].arn}/*"
+        aws_s3_bucket.s3_storage_bucket[each.key].arn,
+        "${aws_s3_bucket.s3_storage_bucket[each.key].arn}/*"
       ]
     }]
   })
