@@ -52,3 +52,40 @@ locals {
   is_single_node = length(var.control_plane_nodes) == 1 && length(var.worker_nodes) == 0
   all_nodes      = concat(var.control_plane_nodes, var.worker_nodes)
 }
+
+
+variable "aws_access_key" {
+  type = string
+}
+
+variable "aws_secret_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "region" {
+  type    = string
+  default = "eu-central-1"
+}
+
+
+variable "s3_versions_buckets" {
+  type        = list(string)
+  description = "backup buckets names"
+}
+
+variable "s3_versions_keep_days" {
+  type    = number
+  default = 1
+}
+
+
+variable "s3_expires_buckets" {
+  type        = list(string)
+  description = "backup buckets names"
+}
+
+variable "s3_expires_keep_days" {
+  type    = number
+  default = 1
+}

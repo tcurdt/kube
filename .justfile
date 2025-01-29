@@ -18,6 +18,8 @@ talos-upload:
         --image-path metal-amd64.raw.xz \
         --compression xz \
         --labels "talos=v1.8.3"
+images:
+    hcloud image list
 
 plan:
     SOPS_AGE_KEY_FILE=./key.txt \

@@ -8,6 +8,10 @@ data "hcloud_image" "talos" {
 }
 
 resource "hcloud_server" "machine" {
+  depends_on = [
+    hcloud_network_subnet.nodes
+  ]
+
   for_each = toset(local.all_nodes)
   name     = var.prefix != "" ? "${var.prefix}-${each.key}" : each.key
 
@@ -25,7 +29,8 @@ resource "hcloud_server" "machine" {
     ip         = "10.0.1.${format("%d", index(local.all_nodes, each.key) + 2)}"
   }
 
-  depends_on = [
-    hcloud_network_subnet.nodes
-  ]
+  # lifecycle {
+  #   ignore_changes  = [ssh_keys]
+  #   prevent_destroy = true
+  # }
 }

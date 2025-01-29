@@ -16,6 +16,10 @@ terraform {
       source  = "carlpett/sops"
       version = "~> 0.7.2"
     }
+    aws = {
+      source  = "hashicorp/aws"
+      version = "5.84.0"
+    }
   }
 }
 
@@ -39,4 +43,12 @@ provider "helm" {
 
 provider "kubernetes" {
   config_path = "./kubeconfig"
+}
+
+provider "aws" {
+  # shared_credentials_files = ["/Users/tcurdt/.aws/credentials"]
+  # profile                  = "default"
+  access_key = var.aws_access_key
+  secret_key = var.aws_secret_key
+  region     = var.region
 }
