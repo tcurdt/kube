@@ -43,26 +43,6 @@ resource "helm_release" "flux" {
   create_namespace = false  # We created it above
   timeout          = 300
 
-  set {
-    name  = "git.url"
-    value = var.flux_repository
-  }
-
-  set {
-    name  = "git.branch"
-    value = var.flux_branch
-  }
-
-  set {
-    name  = "path"
-    value = var.flux_path
-  }
-
-  set {
-    name  = "git.secretName"
-    value = kubernetes_secret.flux_git.metadata[0].name
-  }
-
   # configure SOPS
   set {
     name  = "extraSecretMounts[0].name"
@@ -80,13 +60,53 @@ resource "helm_release" "flux" {
   }
 
   set {
-    name  = "env[0].name"
-    value = "SOPS_AGE_KEY_FILE"
+    name  = "env.SOPS_AGE_KEY_FILE"
+    value = "/home/flux/.config/sops/age/age.agekey"
   }
 
   set {
-    name  = "env[0].value"
-    value = "/home/flux/.config/sops/age/age.agekey"
+    name  = "bootstrap.enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "bootstrap.components"
+    value = "{source-controller,kustomize-controller,helm-controller,notification-controller}"
+  }
+
+  set {
+    name  = "bootstrap.gitRepository.create"
+    value = "true"
+  }
+
+  set {
+    name  = "bootstrap.kustomization.create"
+    value = "true"
+  }
+
+  set {
+    name  = "bootstrap.gitRepository.url"
+    value = var.flux_repository
+  }
+
+  set {
+    name  = "bootstrap.gitRepository.ref.branch"
+    value = var.flux_branch
+  }
+
+  set {
+    name  = "bootstrap.gitRepository.secretName"
+    value = kubernetes_secret.flux_git.metadata[0].name
+  }
+
+  set {
+    name  = "bootstrap.kustomization.path"
+    value = "./flux/clusters/production"
+  }
+
+  set {
+    name  = "bootstrap.kustomization.prune"
+    value = "true"
   }
 }
 

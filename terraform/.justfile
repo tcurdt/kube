@@ -31,15 +31,28 @@ apply:
     SOPS_AGE_KEY_FILE=./.sops.age \
     tofu apply -var-file=.env.tfvars
 
+# check installation
 check:
     kubectl --kubeconfig=./kubeconfig get nodes -o wide
-    kubectl --kubeconfig=./kubeconfig get pods -A
-    kubectl --kubeconfig=./kubeconfig get namespaces
-    kubectl --kubeconfig=./kubeconfig get secrets -A
-    kubectl --kubeconfig=./kubeconfig get secret backend -n live \
-        -o jsonpath='{.data}' | jq . -r | jq 'map_values(@base64d)'
-    kubectl --kubeconfig=./kubeconfig describe nodes
     kubectl --kubeconfig=./kubeconfig get all -A
+
+# check flux status
+flux-check:
+    kubectl --kubeconfig=./kubeconfig get gitrepositories -A
+    kubectl --kubeconfig=./kubeconfig get kustomizations -A
+    kubectl --kubeconfig=./kubeconfig get helmreleases -A
+    kubectl --kubeconfig=./kubeconfig get events -n flux-system
+    kubectl --kubeconfig=./kubeconfig describe gitrepository -n flux-system flux-system || true
+    kubectl --kubeconfig=./kubeconfig get pods -n flux-system
+    kubectl --kubeconfig=./kubeconfig logs -n flux-system deploy/source-controller
+    kubectl --kubeconfig=./kubeconfig get secret -n flux-system flux-git-auth -o yaml
+
+# kubectl --kubeconfig=./kubeconfig describe nodes
+# kubectl --kubeconfig=./kubeconfig get pods -A
+# kubectl --kubeconfig=./kubeconfig get namespaces
+# kubectl --kubeconfig=./kubeconfig get secrets -A
+# kubectl --kubeconfig=./kubeconfig get secret backend -n live \
+#     -o jsonpath='{.data}' | jq . -r | jq 'map_values(@base64d)'
 
 destroy:
     SOPS_AGE_KEY_FILE=./.sops.age \
