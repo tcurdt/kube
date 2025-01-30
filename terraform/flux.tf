@@ -1,4 +1,4 @@
-resource "kubernetes_namespace" "flux_system" {
+resource "kubernetes_namespace" "flux" {
   depends_on = [null_resource.wait_for_cluster]
 
   metadata {
@@ -6,9 +6,8 @@ resource "kubernetes_namespace" "flux_system" {
   }
 }
 
-# Create secret with SOPS Age key
 resource "kubernetes_secret" "sops_age" {
-  depends_on = [kubernetes_namespace.flux_system]
+  depends_on = [kubernetes_namespace.flux]
 
   metadata {
     name      = "sops-age"
@@ -16,13 +15,12 @@ resource "kubernetes_secret" "sops_age" {
   }
 
   data = {
-    "age.agekey" = file("./key.txt")  # Your SOPS Age private key
+    "age.agekey" = file("./.sops.age")  # Your SOPS Age private key
   }
 }
 
-# Create Git authentication secret
 resource "kubernetes_secret" "flux_git" {
-  depends_on = [kubernetes_namespace.flux_system]
+  depends_on = [kubernetes_namespace.flux]
 
   metadata {
     name      = "flux-git-auth"
@@ -31,11 +29,10 @@ resource "kubernetes_secret" "flux_git" {
 
   data = {
     "username" = "git"
-    "password" = data.sops_file.secrets.data["github_token"]
+    "password" = data.sops_file.secrets.data["flux.github_pat_token"]
   }
 }
 
-# Install Flux
 resource "helm_release" "flux" {
   depends_on = [kubernetes_secret.flux_git, kubernetes_secret.sops_age]
 
@@ -52,11 +49,21 @@ resource "helm_release" "flux" {
   }
 
   set {
+    name  = "git.branch"
+    value = var.flux_branch
+  }
+
+  set {
+    name  = "path"
+    value = var.flux_path
+  }
+
+  set {
     name  = "git.secretName"
     value = kubernetes_secret.flux_git.metadata[0].name
   }
 
-  # Configure SOPS
+  # configure SOPS
   set {
     name  = "extraSecretMounts[0].name"
     value = "sops-age"
@@ -85,7 +92,9 @@ resource "helm_release" "flux" {
 
 output "flux_status" {
   value = {
-    namespace = kubernetes_namespace.flux_system.metadata[0].name
-    git_url   = helm_release.flux.values[0].git_url
+    namespace = kubernetes_namespace.flux.metadata[0].name
+    git_url   = var.flux_repository
+    branch    = var.flux_branch
+    path      = var.flux_path
   }
 } 

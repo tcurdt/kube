@@ -1,7 +1,7 @@
 set dotenv-load
 
 sops:
-    SOPS_AGE_KEY_FILE=./key.txt \
+    SOPS_AGE_KEY_FILE=./.sops.age \
     sops -e secrets.yaml > secrets.enc.yaml
 
 # download talos image
@@ -22,11 +22,13 @@ images:
     hcloud image list
 
 plan:
-    SOPS_AGE_KEY_FILE=./key.txt \
+    touch kubeconfig
+    SOPS_AGE_KEY_FILE=./.sops.age \
     tofu plan -var-file=.env.tfvars
 
 apply:
-    SOPS_AGE_KEY_FILE=./key.txt \
+    touch kubeconfig
+    SOPS_AGE_KEY_FILE=./.sops.age \
     tofu apply -var-file=.env.tfvars
 
 check:
@@ -40,7 +42,7 @@ check:
     kubectl --kubeconfig=./kubeconfig get all -A
 
 destroy:
-    SOPS_AGE_KEY_FILE=./key.txt \
+    SOPS_AGE_KEY_FILE=./.sops.age \
     tofu destroy -var-file=.env.tfvars
 
 init:

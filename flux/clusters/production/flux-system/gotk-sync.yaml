@@ -6,8 +6,8 @@ metadata:
 spec:
   interval: 1m
   ref:
-    branch: main  # adjust this to your branch
-  url: ${var.flux_repository}  # this will be your repo URL
+    branch: main
+  url: https://github.com/tcurdt/kube.git
   secretRef:
     name: flux-git-auth
 ---
@@ -18,7 +18,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m0s
-  path: ./clusters/production
+  path: ./flux/clusters/production  # Fix the path to match your repo structure
   prune: true
   sourceRef:
     kind: GitRepository

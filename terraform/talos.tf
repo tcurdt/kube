@@ -1,4 +1,4 @@
-# Generate Talos configurations
+# generate talos configurations
 resource "null_resource" "talos_config" {
 
   provisioner "local-exec" {
@@ -15,7 +15,7 @@ resource "null_resource" "talos_config" {
   }
 }
 
-# Apply controlplane configuration
+# apply controlplane configuration
 resource "null_resource" "talos_apply_controlplane" {
   depends_on = [null_resource.talos_config]
 
@@ -24,7 +24,7 @@ resource "null_resource" "talos_apply_controlplane" {
   provisioner "local-exec" {
     command = <<-EOT
       until nc -z ${hcloud_server.machine[each.key].ipv4_address} 50000; do
-        echo "Waiting for Talos API..."
+        echo "waiting for talos api..."
         sleep 10
       done
 
@@ -37,7 +37,7 @@ resource "null_resource" "talos_apply_controlplane" {
   }
 }
 
-# Apply worker configuration
+# apply worker configuration
 resource "null_resource" "talos_apply_worker" {
   depends_on = [null_resource.talos_apply_controlplane]
 
@@ -59,7 +59,7 @@ resource "null_resource" "talos_apply_worker" {
   }
 }
 
-# Bootstrap the cluster
+# bootstrap the cluster
 resource "null_resource" "talos_bootstrap" {
   depends_on = [
     null_resource.talos_apply_controlplane,
@@ -69,7 +69,7 @@ resource "null_resource" "talos_bootstrap" {
   provisioner "local-exec" {
     command = <<-EOT
       until nc -z ${hcloud_server.machine[var.control_plane_nodes[0]].ipv4_address} 50000; do
-        echo "Waiting for Talos API..."
+        echo "waiting for talos api..."
         sleep 10
       done
 
@@ -84,18 +84,18 @@ resource "null_resource" "talos_bootstrap" {
   }
 }
 
-# Get kubeconfig
+# get kubeconfig
 resource "null_resource" "get_kubeconfig" {
   depends_on = [null_resource.talos_bootstrap]
 
   provisioner "local-exec" {
     command = <<-EOT
       while ! nc -z ${hcloud_server.machine[var.control_plane_nodes[0]].ipv4_address} 50000; do
-        echo "Waiting for Talos API..."
+        echo "waiting for talos api..."
         sleep 5
       done
       while ! nc -z ${hcloud_server.machine[var.control_plane_nodes[0]].ipv4_address} 6443; do
-        echo "Waiting for Kubernetes API..."
+        echo "waiting for kubernetes api..."
         sleep 5
       done
 

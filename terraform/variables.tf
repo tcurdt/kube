@@ -30,19 +30,8 @@ variable "email" {
   type = string
 }
 
-# kubernetes
 
-variable "control_plane_nodes" {
-  type        = list(string)
-  description = "names of control plane nodes"
-  default     = []
-}
-
-variable "worker_nodes" {
-  type        = list(string)
-  description = "names of worker-only nodes"
-  default     = []
-}
+# hetzner machines
 
 variable "image" {
   type    = string
@@ -62,15 +51,44 @@ variable "location" {
   # hcloud location list
 }
 
+
+# kubernetes
+
+variable "control_plane_nodes" {
+  type        = list(string)
+  description = "names of control plane nodes"
+  default     = []
+}
+
+variable "worker_nodes" {
+  type        = list(string)
+  description = "names of worker-only nodes"
+  default     = []
+}
+
+
+# flux
+
 variable "flux_repository" {
   type = string
   # full url to the git repository
+}
+
+variable "flux_branch" {
+  type    = string
+  default = "main"
+}
+
+variable "flux_path" {
+  type    = string
+  default = "./flux/clusters/production"
 }
 
 locals {
   is_single_node = length(var.control_plane_nodes) == 1 && length(var.worker_nodes) == 0
   all_nodes      = concat(var.control_plane_nodes, var.worker_nodes)
 }
+
 
 # s3
 
@@ -95,4 +113,11 @@ variable "s3_backup_keep_days" {
   default = 1
 }
 
+
 # polly
+
+variable "create_aws_resources" {
+  type        = bool
+  description = "Whether to create AWS resources"
+  default     = false
+}
