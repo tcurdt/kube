@@ -3,7 +3,7 @@ resource "null_resource" "wait_for_cluster" {
 
   provisioner "local-exec" {
     command = <<-EOT
-      export KUBECONFIG=./kubeconfig
+      export KUBECONFIG=.kubeconfig
 
       until kubectl wait --for=condition=ready nodes --all --timeout=600s; do
         echo "Waiting for nodes to be ready..."

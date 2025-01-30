@@ -7,7 +7,7 @@ https://github.com/settings/tokens
 2. Generate new token
     - repo (full control)
 
-Next add the token to the secrets.yaml file.
+Next add the token to the .secrets.yaml file.
 
 ```
 flux:

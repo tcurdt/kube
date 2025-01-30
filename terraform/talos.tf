@@ -102,7 +102,7 @@ resource "null_resource" "get_kubeconfig" {
       talosctl --talosconfig=./talos-config/talosconfig \
         kubeconfig \
         --nodes ${hcloud_server.machine[var.control_plane_nodes[0]].ipv4_address} \
-        -f ./kubeconfig
+        -f .kubeconfig
     EOT
   }
 }
