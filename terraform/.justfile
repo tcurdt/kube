@@ -36,8 +36,12 @@ check:
     kubectl --kubeconfig=./kubeconfig get nodes -o wide
     kubectl --kubeconfig=./kubeconfig get all -A
 
+# check flux locally
+flux-local:
+    flux --kubeconfig ./kubeconfig stats
+
 # check flux status
-flux-check:
+flux-remote:
     kubectl --kubeconfig=./kubeconfig get gitrepositories -A
     kubectl --kubeconfig=./kubeconfig get kustomizations -A
     kubectl --kubeconfig=./kubeconfig get helmreleases -A
