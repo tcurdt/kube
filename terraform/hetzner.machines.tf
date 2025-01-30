@@ -41,7 +41,6 @@ resource "hcloud_server" "machine" {
   server_type = var.server_type
   location    = var.location
   image       = data.hcloud_image.talos.id
-  // image       = var.image
 
   ssh_keys = [hcloud_ssh_key.talos.id]
   backups  = false
@@ -68,4 +67,3 @@ output "nodes" {
     }
   }
 }
-

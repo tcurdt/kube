@@ -6,17 +6,20 @@ resource "null_resource" "wait_for_cluster" {
       export KUBECONFIG=.kubeconfig
 
       until kubectl wait --for=condition=ready nodes --all --timeout=600s; do
-        echo "Waiting for nodes to be ready..."
+        echo "waiting for nodes..."
         sleep 10
       done
+      echo "nodes are ready"
 
       until kubectl cluster-info; do
-        echo "Verifying API server accessibility..."
+        echo "waiting for kubernetes..."
         sleep 10
       done
+      echo "kubernetes is ready"
 
-      echo "Waiting for core services..."
+      echo "waiting for core services..."
       kubectl wait --for=condition=ready -n kube-system pod -l k8s-app=kube-dns --timeout=300s
+      echo "core services are ready"
 
     EOT
   }

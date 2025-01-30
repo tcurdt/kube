@@ -15,7 +15,7 @@ resource "kubernetes_secret" "sops_age" {
   }
 
   data = {
-    "age.agekey" = file("./.sops.age")  # Your SOPS Age private key
+    "age.agekey" = file(".sops.age") # SOPS private key
   }
 }
 
@@ -40,7 +40,7 @@ resource "helm_release" "flux" {
   repository       = "https://fluxcd-community.github.io/helm-charts"
   chart            = "flux2"
   namespace        = "flux-system"
-  create_namespace = false  # We created it above
+  create_namespace = false # created above
   timeout          = 300
 
   # configure SOPS
@@ -69,10 +69,10 @@ resource "helm_release" "flux" {
     value = "true"
   }
 
-  set {
-    name  = "bootstrap.components"
-    value = "{source-controller,kustomize-controller,helm-controller,notification-controller}"
-  }
+  # set {
+  #   name  = "bootstrap.components"
+  #   value = "{source-controller,kustomize-controller,helm-controller,notification-controller}"
+  # }
 
   set {
     name  = "bootstrap.gitRepository.create"
@@ -117,4 +117,4 @@ output "flux_status" {
     branch    = var.flux_branch
     path      = var.flux_path
   }
-} 
+}

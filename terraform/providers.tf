@@ -23,7 +23,7 @@ terraform {
   }
 }
 
-// export SOPS_AGE_KEY_FILE=./key.txt
+// export SOPS_AGE_KEY_FILE=.sops.age
 provider "sops" {
 }
 

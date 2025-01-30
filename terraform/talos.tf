@@ -24,9 +24,10 @@ resource "null_resource" "talos_apply_controlplane" {
   provisioner "local-exec" {
     command = <<-EOT
       until nc -z ${hcloud_server.machine[each.key].ipv4_address} 50000; do
-        echo "waiting for talos api..."
+        echo "waiting for talos..."
         sleep 10
       done
+      echo "talos is ready"
 
       talosctl --talosconfig=./talos-config/talosconfig \
         apply-config \
@@ -46,9 +47,10 @@ resource "null_resource" "talos_apply_worker" {
   provisioner "local-exec" {
     command = <<-EOT
       until nc -z ${hcloud_server.machine[each.key].ipv4_address} 50000; do
-        echo "Waiting for Talos API..."
+        echo "waiting for talos..."
         sleep 10
       done
+      echo "talos is ready"
 
       talosctl --talosconfig=./talos-config/talosconfig \
         apply-config \
@@ -69,9 +71,10 @@ resource "null_resource" "talos_bootstrap" {
   provisioner "local-exec" {
     command = <<-EOT
       until nc -z ${hcloud_server.machine[var.control_plane_nodes[0]].ipv4_address} 50000; do
-        echo "waiting for talos api..."
+        echo "waiting for talos..."
         sleep 10
       done
+      echo "talos is ready"
 
       talosctl --talosconfig=./talos-config/talosconfig \
         config endpoint ${hcloud_server.machine[var.control_plane_nodes[0]].ipv4_address}
@@ -90,14 +93,18 @@ resource "null_resource" "get_kubeconfig" {
 
   provisioner "local-exec" {
     command = <<-EOT
+
       while ! nc -z ${hcloud_server.machine[var.control_plane_nodes[0]].ipv4_address} 50000; do
-        echo "waiting for talos api..."
+        echo "waiting for talos..."
         sleep 5
       done
+      echo "talos is ready"
+
       while ! nc -z ${hcloud_server.machine[var.control_plane_nodes[0]].ipv4_address} 6443; do
-        echo "waiting for kubernetes api..."
+        echo "waiting for kubernetes..."
         sleep 5
       done
+      echo "kubernetes is ready"
 
       talosctl --talosconfig=./talos-config/talosconfig \
         kubeconfig \
