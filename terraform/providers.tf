@@ -14,7 +14,7 @@ terraform {
     }
     sops = {
       source  = "carlpett/sops"
-      version = "~> 0.7.2"
+      version = "~> 1.1.0"
     }
     aws = {
       source  = "hashicorp/aws"
