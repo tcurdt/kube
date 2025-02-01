@@ -6,12 +6,19 @@ watch_repo:
 watch_apply:
     kubectl --kubeconfig=terraform/.kubeconfig get kustomizations -A -w
 
-trigger:
-    flux --kubeconfig=terraform/.kubeconfig reconcile kustomization flux-system
+
+delete_caddy:
+    kubectl --kubeconfig=terraform/.kubeconfig -n infra delete deployment.apps/caddy
+    kubectl --kubeconfig=terraform/.kubeconfig -n infra delete service/caddy
+    # kubectl --kubeconfig=terraform/.kubeconfig -n infra delete pod/caddy-68898478df-n6xrh
+
+# trigger:
+#     flux --kubeconfig=terraform/.kubeconfig reconcile kustomization flux-system
 
 all:
     kubectl --kubeconfig=terraform/.kubeconfig get nodes -o wide
     kubectl --kubeconfig=terraform/.kubeconfig get all -A
+
 # kubectl --kubeconfig=terraform/.kubeconfig get secrets -A
 # kubectl --kubeconfig=terraform/.kubeconfig get secret backend -n live \
 #     -o jsonpath='{.data}' | jq . -r | jq 'map_values(@base64d)'
