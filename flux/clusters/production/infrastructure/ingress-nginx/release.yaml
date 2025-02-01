@@ -24,3 +24,5 @@ spec:
         requests:
           cpu: 50m
           memory: 90Mi
+      admissionWebhooks:
+        enabled: false # Disable the admission webhook
