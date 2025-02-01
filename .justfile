@@ -1,10 +1,10 @@
 set dotenv-load
 
 watch_repo:
-    watch kubectl --kubeconfig=terraform/.kubeconfig get gitrepositories -A
+    kubectl --kubeconfig=terraform/.kubeconfig get gitrepositories -A -w
 
 watch_apply:
-    watch kubectl --kubeconfig=terraform/.kubeconfig get kustomizations -A
+    kubectl --kubeconfig=terraform/.kubeconfig get kustomizations -A -w
 
 trigger:
     flux --kubeconfig=terraform/.kubeconfig reconcile kustomization flux-system
