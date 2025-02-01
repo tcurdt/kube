@@ -3,4 +3,4 @@ kind: Kustomization
 resources:
   - gotk-components.yaml
   - gotk-sync.yaml
-  - test-secret.enc.yaml 
+  # - test-secret.enc.yaml
