@@ -21,6 +21,9 @@ talos-upload:
 images:
     hcloud image list
 
+init:
+    tofu init
+
 plan:
     touch .kubeconfig
     SOPS_AGE_KEY_FILE=.sops.age \
@@ -31,43 +34,6 @@ apply:
     SOPS_AGE_KEY_FILE=.sops.age \
     tofu apply -var-file=.env.tfvars
 
-repo:
-    watch kubectl --kubeconfig=.kubeconfig get gitrepositories -A
-
-kustomizations:
-    kubectl --kubeconfig=.kubeconfig get kustomizations -A
-
-# check installation
-check:
-    kubectl --kubeconfig=.kubeconfig get nodes -o wide
-    kubectl --kubeconfig=.kubeconfig get all -A
-# kubectl --kubeconfig=.kubeconfig get secrets -A
-# kubectl --kubeconfig=.kubeconfig get secret backend -n live \
-#     -o jsonpath='{.data}' | jq . -r | jq 'map_values(@base64d)'
-
-# check flux locally
-flux-local:
-    flux --kubeconfig .kubeconfig stats
-    flux --kubeconfig .kubeconfig get kustomizations
-
-# check flux status
-flux-remote:
-    kubectl --kubeconfig=.kubeconfig get gitrepositories -A
-    kubectl --kubeconfig=.kubeconfig get kustomizations -A
-    kubectl --kubeconfig=.kubeconfig get helmreleases -A
-    kubectl --kubeconfig=.kubeconfig get secret flux-git-auth -o yaml
-    kubectl --kubeconfig=.kubeconfig -n flux-system describe gitrepository flux-system || true
-    kubectl --kubeconfig=.kubeconfig -n flux-system get events
-    kubectl --kubeconfig=.kubeconfig -n flux-system get pods
-    kubectl --kubeconfig=.kubeconfig -n flux-system get kustomizations
-
-# kubectl --kubeconfig=.kubeconfig -n flux-system logs deploy/source-controller
-# kubectl --kubeconfig=.kubeconfig -n flux-system logs service/source-controller
-# kubectl --kubeconfig=.kubeconfig -n flux-system logs service/flux-operator
-
 destroy:
     SOPS_AGE_KEY_FILE=.sops.age \
     tofu destroy -var-file=.env.tfvars
-
-init:
-    tofu init
