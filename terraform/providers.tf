@@ -2,23 +2,23 @@ terraform {
   required_providers {
     hcloud = {
       source  = "hetznercloud/hcloud"
-      version = "1.49.1"
+      version = "~> 1.45"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "~> 2.35.0"
+      version = "~> 2.27"
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 2.17.0"
+      version = "~> 2.12"
     }
     sops = {
       source  = "carlpett/sops"
-      version = "~> 1.1.0"
+      version = "~> 0.7"
     }
     aws = {
       source  = "hashicorp/aws"
-      version = "5.84.0"
+      version = "~> 5.84"
     }
   }
 }
