@@ -5,17 +5,18 @@ metadata:
   namespace: demo
   annotations:
     cert-manager.io/cluster-issuer: selfsigned
+    nginx.ingress.kubernetes.io/enable-validation: "false"
 spec:
   ingressClassName: nginx
   tls:
-  - secretName: hello-tls
+    - secretName: hello-tls
   rules:
-  - http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: hello-world
-            port:
-              number: 80 
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: hello-world
+                port:
+                  number: 80
