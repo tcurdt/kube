@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: ingress-nginx
-      version: "4.7.x"
+      version: "4.12.x"
       sourceRef:
         kind: HelmRepository
         name: ingress-nginx
@@ -20,4 +20,4 @@ spec:
       resources:
         requests:
           cpu: 50m
-          memory: 90Mi 
+          memory: 90Mi
