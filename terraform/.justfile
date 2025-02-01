@@ -31,6 +31,12 @@ apply:
     SOPS_AGE_KEY_FILE=.sops.age \
     tofu apply -var-file=.env.tfvars
 
+repo:
+    watch kubectl --kubeconfig=.kubeconfig get gitrepositories -A
+
+kustomizations:
+    kubectl --kubeconfig=.kubeconfig get kustomizations -A
+
 # check installation
 check:
     kubectl --kubeconfig=.kubeconfig get nodes -o wide
