@@ -4,6 +4,10 @@ resource "kubernetes_namespace" "flux" {
   metadata {
     name = "flux-system"
   }
+
+  # lifecycle {
+  #   ignore_changes = [metadata]
+  # }
 }
 
 resource "kubernetes_secret" "sops_age" {
@@ -33,80 +37,93 @@ resource "kubernetes_secret" "flux_git" {
   }
 }
 
-resource "helm_release" "flux" {
-  depends_on = [kubernetes_secret.flux_git, kubernetes_secret.sops_age]
+resource "helm_release" "flux_operator" {
+  depends_on = [kubernetes_namespace.flux]
 
-  name             = "flux"
-  repository       = "https://fluxcd-community.github.io/helm-charts"
-  chart            = "flux2"
-  namespace        = "flux-system"
-  create_namespace = false # created above
-  timeout          = 300
+  name       = "flux-operator"
+  namespace  = "flux-system"
+  repository = "oci://ghcr.io/controlplaneio-fluxcd/charts"
+  chart      = "flux-operator"
+  wait       = true
+}
 
-  # configure SOPS
+resource "helm_release" "flux_instance" {
+  depends_on = [helm_release.flux_operator, kubernetes_secret.flux_git, kubernetes_secret.sops_age]
+
+  name       = "flux"
+  namespace  = "flux-system"
+  repository = "oci://ghcr.io/controlplaneio-fluxcd/charts"
+  chart      = "flux-instance"
+  timeout    = 300
+
+  values = [
+    file("config.flux/components.yaml")
+  ]
+
+  # sops
+
   set {
-    name  = "extraSecretMounts[0].name"
+    name  = "instance.extraSecretMounts[0].name"
     value = "sops-age"
   }
 
   set {
-    name  = "extraSecretMounts[0].secretName"
+    name  = "instance.extraSecretMounts[0].secretName"
     value = kubernetes_secret.sops_age.metadata[0].name
   }
 
   set {
-    name  = "extraSecretMounts[0].mountPath"
+    name  = "instance.extraSecretMounts[0].mountPath"
     value = "/home/flux/.config/sops/age"
   }
 
   set {
-    name  = "env.SOPS_AGE_KEY_FILE"
+    name  = "instance.env[0].name"
+    value = "SOPS_AGE_KEY_FILE"
+  }
+
+  set {
+    name  = "instance.env[0].value"
     value = "/home/flux/.config/sops/age/age.agekey"
   }
 
-  set {
-    name  = "bootstrap.enabled"
-    value = "true"
-  }
-
-  # set {
-  #   name  = "bootstrap.components"
-  #   value = "{source-controller,kustomize-controller,helm-controller,notification-controller}"
-  # }
+  # flux
 
   set {
-    name  = "bootstrap.gitRepository.create"
-    value = "true"
+    name  = "instance.distribution.registry"
+    value = "ghcr.io/fluxcd"
   }
 
   set {
-    name  = "bootstrap.kustomization.create"
-    value = "true"
+    name  = "instance.distribution.version"
+    value = "2.x"
+  }
+
+  # git
+
+  set {
+    name  = "instance.sync.kind"
+    value = "GitRepository"
   }
 
   set {
-    name  = "bootstrap.gitRepository.url"
+    name  = "instance.sync.url"
     value = var.flux_repository
   }
 
   set {
-    name  = "bootstrap.gitRepository.ref.branch"
-    value = var.flux_branch
+    name  = "instance.sync.path"
+    value = var.flux_path
   }
 
   set {
-    name  = "bootstrap.gitRepository.secretName"
+    name  = "instance.sync.ref"
+    value = "refs/heads/${var.flux_branch}"
+  }
+
+  set {
+    name  = "instance.sync.pullSecret"
     value = kubernetes_secret.flux_git.metadata[0].name
-  }
-
-  set {
-    name  = "bootstrap.kustomization.path"
-    value = "./flux/clusters/production"
-  }
-
-  set {
-    name  = "bootstrap.kustomization.prune"
-    value = "true"
   }
 }
 

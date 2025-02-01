@@ -76,12 +76,12 @@ resource "null_resource" "talos_bootstrap" {
       done
       echo "talos is ready"
 
-      talosctl --talosconfig=.talosconfig \
+      talosctl --talosconfig=.talosconfig/talosconfig \
         config endpoint ${hcloud_server.machine[var.control_plane_nodes[0]].ipv4_address}
-      talosctl --talosconfig=.talosconfig \
+      talosctl --talosconfig=.talosconfig/talosconfig \
         config node ${hcloud_server.machine[var.control_plane_nodes[0]].ipv4_address}
 
-      talosctl --talosconfig=.talosconfig \
+      talosctl --talosconfig=.talosconfig/talosconfig \
         bootstrap
     EOT
   }
@@ -106,7 +106,7 @@ resource "null_resource" "get_kubeconfig" {
       done
       echo "kubernetes is ready"
 
-      talosctl --talosconfig=.talosconfig \
+      talosctl --talosconfig=.talosconfig/talosconfig \
         kubeconfig \
         --nodes ${hcloud_server.machine[var.control_plane_nodes[0]].ipv4_address} \
         -f .kubeconfig

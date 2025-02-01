@@ -35,6 +35,8 @@ apply:
 check:
     kubectl --kubeconfig=.kubeconfig get nodes -o wide
     kubectl --kubeconfig=.kubeconfig get all -A
+    # kubectl --kubeconfig=.kubeconfig -n flux-system logs service/flux-operator
+    # kubectl --kubeconfig=.kubeconfig -n flux-system logs service/source-controller
 
 # check flux locally
 flux-local:
