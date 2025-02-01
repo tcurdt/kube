@@ -69,6 +69,11 @@ data:
 
     talos.vafer.work {
       header -server
+      log {
+        output stdout
+        format console
+        level INFO
+      }
       reverse_proxy http://hello-world.demo.svc.cluster.local:80
     }
 ---
