@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: infra
+  name: caddy
+  labels:
+    app: caddy
+spec:
+  # type: NodePort
+  # ports:
+  #   - port: 80
+  #     nodePort: 80      # root/privileged
+  #     protocol: TCP
+  #   - port: 443
+  #     nodePort: 443     # root/privileged
+  #     protocol: TCP
+  replicas: 1
+  selector:
+    matchLabels:
+      app: caddy
+  template:
+    metadata:
+      labels:
+        app: caddy
+    spec:
+      # securityContext:
+      #   runAsNonRoot: true
+      #   runAsUser: 1000
+      #   runAsGroup: 1000
+      #   fsGroup: 1000
+      containers:
+        - name: caddy
+          image: caddy:2.7.6-alpine
+          ports:
+            - name: http
+              containerPort: 80
+            - name: https
+              containerPort: 443
+            - name: admin
+              containerPort: 2019
+          volumeMounts:
+            - name: caddy-config
+              mountPath: /etc/caddy/Caddyfile
+              subPath: Caddyfile
+            - name: caddy-data
+              mountPath: /data
+            - name: cdn-storage
+              mountPath: /srv/volumes/cdn
+          resources:
+            requests:
+              memory: 51Mi
+              cpu: 100m
+            limits:
+              memory: 200Mi
+              cpu: 500m
+          livenessProbe:
+            initialDelaySeconds: 3
+            httpGet:
+              path: /metrics
+              port: admin
+          readinessProbe:
+            initialDelaySeconds: 3
+            httpGet:
+              path: /metrics
+              port: admin
+          securityContext:
+            allowPrivilegeEscalation: false
+      volumes:
+        - name: caddy-config
+          configMap:
+            name: caddy
+        - name: caddy-data
+          persistentVolumeClaim:
+            claimName: caddy-data-volume-claim
+        - name: cdn-storage
+          persistentVolumeClaim:
+            claimName: cdn-volume-claim

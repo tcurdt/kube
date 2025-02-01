@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: infra
+  name: caddy
+  labels:
+    app: caddy
+data:
+  Caddyfile: |
+    {
+      email "tcurdt@vafer.org"
+      admin :2019
+      servers {
+        metrics
+      }
+      # debug
+      acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+    }
+
+    talos.vafer.work {
+      header -server
+      reverse_proxy http://hello-world.demo.svc.cluster.local:80
+    }
