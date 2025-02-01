@@ -11,7 +11,8 @@ spec:
   ports:
     - name: http
       port: 80
+      nodePort: 30080
     - name: https
       port: 443
-  type: LoadBalancer
-  externalTrafficPolicy: Local
+      nodePort: 30443
+  type: NodePort

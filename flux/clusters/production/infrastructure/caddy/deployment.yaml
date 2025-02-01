@@ -6,14 +6,6 @@ metadata:
   labels:
     app: caddy
 spec:
-  # type: NodePort
-  # ports:
-  #   - port: 80
-  #     nodePort: 80      # root/privileged
-  #     protocol: TCP
-  #   - port: 443
-  #     nodePort: 443     # root/privileged
-  #     protocol: TCP
   replicas: 1
   selector:
     matchLabels:
