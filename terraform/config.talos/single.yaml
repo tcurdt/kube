@@ -11,6 +11,14 @@ machine:
         addresses:
           - 10.0.1.2/24
   kubelet:
+    extraMounts:
+      - destination: /var/local-path-provisioner
+        type: bind
+        source: /var/local-path-provisioner
+        options:
+          - bind
+          - rshared
+          - rw
     extraArgs:
       node-labels: "node-role.kubernetes.io/control-plane=,node-role.kubernetes.io/worker="
     nodeIP:
