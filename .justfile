@@ -6,8 +6,10 @@ watch_repo:
 watch_apply:
     watch kubectl --kubeconfig=terraform/.kubeconfig get kustomizations -A
 
-# check installation
-check:
+trigger:
+    flux --kubeconfig=terraform/.kubeconfig reconcile kustomization flux-system
+
+all:
     kubectl --kubeconfig=terraform/.kubeconfig get nodes -o wide
     kubectl --kubeconfig=terraform/.kubeconfig get all -A
 # kubectl --kubeconfig=terraform/.kubeconfig get secrets -A
