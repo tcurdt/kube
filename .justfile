@@ -1,9 +1,9 @@
 set dotenv-load
 
-wait_repo:
+watch_repo:
     watch kubectl --kubeconfig=terraform/.kubeconfig get gitrepositories -A
 
-wait_apply:
+watch_apply:
     watch kubectl --kubeconfig=terraform/.kubeconfig get kustomizations -A
 
 # check installation
