@@ -1,0 +1,136 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: caddy-data-volume-claim
+  namespace: infra
+  labels:
+    app: caddy
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 50Mi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: caddy-data-volume
+  namespace: infra
+  labels:
+    app: caddy
+    type: local
+spec:
+  capacity:
+    storage: 50Mi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  hostPath:
+    path: /var/mnt/caddy
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: infra
+  name: caddy
+  labels:
+    app: caddy
+spec:
+  selector:
+    app: caddy
+  ports:
+    - name: http
+      port: 80
+    - name: https
+      port: 443
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: infra
+  name: caddy
+  labels:
+    app: caddy
+data:
+  Caddyfile: |
+    {
+      email "tcurdt@vafer.org"
+      admin :2019
+      servers {
+        metrics
+      }
+      # debug
+      acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+    }
+
+    talos.vafer.work {
+      header -server
+      reverse_proxy http://hello-world.demo.svc.cluster.local:80
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: infra
+  name: caddy
+  labels:
+    app: caddy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: caddy
+  template:
+    metadata:
+      labels:
+        app: caddy
+    spec:
+      containers:
+        - name: caddy
+          image: caddy:2.7.6-alpine
+          ports:
+            - name: http
+              containerPort: 80
+            - name: https
+              containerPort: 443
+            - name: admin
+              containerPort: 2019
+          volumeMounts:
+            - name: caddy-config
+              mountPath: /etc/caddy/Caddyfile
+              subPath: Caddyfile
+            - name: caddy-data
+              mountPath: /data
+            - name: cdn-storage
+              mountPath: /srv/volumes/cdn
+          resources:
+            requests:
+              memory: 51Mi
+            limits:
+              memory: 200Mi
+          livenessProbe:
+            initialDelaySeconds: 3
+            httpGet:
+              path: /metrics
+              port: admin
+          readinessProbe:
+            initialDelaySeconds: 3
+            httpGet:
+              path: /metrics
+              port: admin
+          securityContext:
+            allowPrivilegeEscalation: false
+      volumes:
+        - name: caddy-config
+          configMap:
+            name: caddy
+        - name: caddy-data
+          persistentVolumeClaim:
+            claimName: caddy-data-volume-claim
+        - name: cdn-storage
+          persistentVolumeClaim:
+            claimName: cdn-volume-claim
