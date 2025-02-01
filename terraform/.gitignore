@@ -4,4 +4,4 @@
 .sops.age
 terraform.tfstate*
 .kubeconfig
-talos-config
+.talosconfig

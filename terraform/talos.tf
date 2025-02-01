@@ -7,10 +7,10 @@ resource "null_resource" "talos_config" {
         talos-cluster \
         https://${hcloud_server.machine[var.control_plane_nodes[0]].ipv4_address}:6443 \
         --force \
-        --output-dir ./talos-config \
-        --config-patch-control-plane @patches/controlplane.yaml \
-        --config-patch-worker @patches/worker.yaml \
-        ${local.is_single_node ? "--config-patch @patches/single.yaml" : ""}
+        --output-dir .talosconfig \
+        --config-patch-control-plane @config.talos/controlplane.yaml \
+        --config-patch-worker @config.talos/worker.yaml \
+        ${local.is_single_node ? "--config-patch @config.talos/single.yaml" : ""}
     EOT
   }
 }
@@ -29,10 +29,10 @@ resource "null_resource" "talos_apply_controlplane" {
       done
       echo "talos is ready"
 
-      talosctl --talosconfig=./talos-config/talosconfig \
+      talosctl --talosconfig=.talosconfig/talosconfig \
         apply-config \
         --nodes ${hcloud_server.machine[each.key].ipv4_address} \
-        --file ./talos-config/controlplane.yaml \
+        --file .talosconfig/controlplane.yaml \
         --insecure
     EOT
   }
@@ -52,10 +52,10 @@ resource "null_resource" "talos_apply_worker" {
       done
       echo "talos is ready"
 
-      talosctl --talosconfig=./talos-config/talosconfig \
+      talosctl --talosconfig=.talosconfig/talosconfig \
         apply-config \
         --nodes ${hcloud_server.machine[each.key].ipv4_address} \
-        --file ./talos-config/worker.yaml \
+        --file .talosconfig/worker.yaml \
         --insecure
     EOT
   }
@@ -76,12 +76,12 @@ resource "null_resource" "talos_bootstrap" {
       done
       echo "talos is ready"
 
-      talosctl --talosconfig=./talos-config/talosconfig \
+      talosctl --talosconfig=.talosconfig \
         config endpoint ${hcloud_server.machine[var.control_plane_nodes[0]].ipv4_address}
-      talosctl --talosconfig=./talos-config/talosconfig \
+      talosctl --talosconfig=.talosconfig \
         config node ${hcloud_server.machine[var.control_plane_nodes[0]].ipv4_address}
 
-      talosctl --talosconfig=./talos-config/talosconfig \
+      talosctl --talosconfig=.talosconfig \
         bootstrap
     EOT
   }
@@ -106,7 +106,7 @@ resource "null_resource" "get_kubeconfig" {
       done
       echo "kubernetes is ready"
 
-      talosctl --talosconfig=./talos-config/talosconfig \
+      talosctl --talosconfig=.talosconfig \
         kubeconfig \
         --nodes ${hcloud_server.machine[var.control_plane_nodes[0]].ipv4_address} \
         -f .kubeconfig
