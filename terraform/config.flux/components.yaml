@@ -9,6 +9,15 @@ instance:
   kustomize:
     patches:
       - target:
+          kind: Kustomization
+        patch: |
+          - op: add
+            path: /spec/decryption
+            value:
+              provider: sops
+              secretRef:
+                name: sops-age
+      - target:
           kind: Deployment
           name: "(kustomize-controller|helm-controller)"
         patch: |

@@ -35,30 +35,29 @@ apply:
 check:
     kubectl --kubeconfig=.kubeconfig get nodes -o wide
     kubectl --kubeconfig=.kubeconfig get all -A
-    # kubectl --kubeconfig=.kubeconfig -n flux-system logs service/flux-operator
-    # kubectl --kubeconfig=.kubeconfig -n flux-system logs service/source-controller
+# kubectl --kubeconfig=.kubeconfig get secrets -A
+# kubectl --kubeconfig=.kubeconfig get secret backend -n live \
+#     -o jsonpath='{.data}' | jq . -r | jq 'map_values(@base64d)'
 
 # check flux locally
 flux-local:
     flux --kubeconfig .kubeconfig stats
+    flux --kubeconfig .kubeconfig get kustomizations
 
 # check flux status
 flux-remote:
     kubectl --kubeconfig=.kubeconfig get gitrepositories -A
     kubectl --kubeconfig=.kubeconfig get kustomizations -A
     kubectl --kubeconfig=.kubeconfig get helmreleases -A
-    kubectl --kubeconfig=.kubeconfig get events -n flux-system
-    kubectl --kubeconfig=.kubeconfig describe gitrepository -n flux-system flux-system || true
-    kubectl --kubeconfig=.kubeconfig get pods -n flux-system
-    kubectl --kubeconfig=.kubeconfig logs -n flux-system deploy/source-controller
-    kubectl --kubeconfig=.kubeconfig get secret -n flux-system flux-git-auth -o yaml
+    kubectl --kubeconfig=.kubeconfig get secret flux-git-auth -o yaml
+    kubectl --kubeconfig=.kubeconfig -n flux-system describe gitrepository flux-system || true
+    kubectl --kubeconfig=.kubeconfig -n flux-system get events
+    kubectl --kubeconfig=.kubeconfig -n flux-system get pods
+    kubectl --kubeconfig=.kubeconfig -n flux-system get kustomizations
 
-# kubectl --kubeconfig=.kubeconfig describe nodes
-# kubectl --kubeconfig=.kubeconfig get pods -A
-# kubectl --kubeconfig=.kubeconfig get namespaces
-# kubectl --kubeconfig=.kubeconfig get secrets -A
-# kubectl --kubeconfig=.kubeconfig get secret backend -n live \
-#     -o jsonpath='{.data}' | jq . -r | jq 'map_values(@base64d)'
+# kubectl --kubeconfig=.kubeconfig -n flux-system logs deploy/source-controller
+# kubectl --kubeconfig=.kubeconfig -n flux-system logs service/source-controller
+# kubectl --kubeconfig=.kubeconfig -n flux-system logs service/flux-operator
 
 destroy:
     SOPS_AGE_KEY_FILE=.sops.age \

@@ -5,9 +5,6 @@ resource "kubernetes_namespace" "flux" {
     name = "flux-system"
   }
 
-  # lifecycle {
-  #   ignore_changes = [metadata]
-  # }
 }
 
 resource "kubernetes_secret" "sops_age" {
@@ -61,21 +58,6 @@ resource "helm_release" "flux_instance" {
   ]
 
   # sops
-
-  set {
-    name  = "instance.extraSecretMounts[0].name"
-    value = "sops-age"
-  }
-
-  set {
-    name  = "instance.extraSecretMounts[0].secretName"
-    value = kubernetes_secret.sops_age.metadata[0].name
-  }
-
-  set {
-    name  = "instance.extraSecretMounts[0].mountPath"
-    value = "/home/flux/.config/sops/age"
-  }
 
   set {
     name  = "instance.env[0].name"
