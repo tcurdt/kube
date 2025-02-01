@@ -24,6 +24,9 @@ spec:
         namespace: flux-system
   install:
     createNamespace: true
+    crds: Create
+  upgrade:
+    crds: CreateReplace
 ---
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
