@@ -36,8 +36,6 @@ spec:
               subPath: Caddyfile
             - name: caddy-data
               mountPath: /data
-            - name: cdn-storage
-              mountPath: /srv/volumes/cdn
           resources:
             requests:
               memory: 51Mi
@@ -64,6 +62,3 @@ spec:
         - name: caddy-data
           persistentVolumeClaim:
             claimName: caddy-data-volume-claim
-        - name: cdn-storage
-          persistentVolumeClaim:
-            claimName: cdn-volume-claim
