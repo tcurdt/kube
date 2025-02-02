@@ -7,6 +7,13 @@ watch_apply:
     kubectl --kubeconfig=terraform/.kubeconfig get kustomizations -A -w
 
 
+talos:
+    talosctl --talosconfig terraform/.talosconfig/talosconfig health
+
+curl:
+    curl -I 138.199.151.168:30080
+
+
 delete_caddy:
     kubectl --kubeconfig=terraform/.kubeconfig -n infra delete deployment.apps/caddy
     kubectl --kubeconfig=terraform/.kubeconfig -n infra delete service/caddy
