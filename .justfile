@@ -6,13 +6,18 @@ watch_repo:
 watch_apply:
     kubectl --kubeconfig=terraform/.kubeconfig get kustomizations -A -w
 
+k9s:
+    k9s --kubeconfig=terraform/.kubeconfig
 
 talos:
     talosctl --talosconfig terraform/.talosconfig/talosconfig health
 
 curl:
-    curl -I 138.199.151.168:30080
-
+    #!/usr/bin/env bash
+    IP=$(grep server terraform/.kubeconfig | sed -e 's/.*https:\/\///' -e 's/:.*$//')
+    echo $IP
+    curl -I http://$IP:30080 || true
+    curl -I https://$IP:30443 || true
 
 delete_caddy:
     kubectl --kubeconfig=terraform/.kubeconfig -n infra delete deployment.apps/caddy
