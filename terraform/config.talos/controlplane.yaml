@@ -1,6 +1,6 @@
 cluster:
-  # externalCloudProvider:
-  #   enabled: true
+  externalCloudProvider:
+    enabled: true
   network:
     cni:
       name: flannel
@@ -9,14 +9,12 @@ cluster:
     # image: registry.k8s.io/kube-proxy:v1.32.1
     # extraArgs:
     #     nodeport-addresses: 0.0.0.0/0
-
 machine:
   type: controlplane
   network:
     interfaces:
-      - interface: eth1
-        addresses:
-          - 10.0.1.2/24
+      - interface: eth0
+        dhcp: true
   kubelet:
     extraMounts:
       - destination: /var/local-path-provisioner

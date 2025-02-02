@@ -1,6 +1,6 @@
 cluster:
-  # externalCloudProvider:
-  #   enabled: true
+  externalCloudProvider:
+    enabled: true
   network:
     cni:
       name: flannel
@@ -10,9 +10,8 @@ machine:
   type: controlplane
   network:
     interfaces:
-      - interface: eth1
-        addresses:
-          - 10.0.1.2/24
+      - interface: eth0
+        dhcp: true
   kubelet:
     extraMounts:
       - destination: /var/local-path-provisioner

@@ -1,12 +1,16 @@
 cluster:
+  externalCloudProvider:
+    enabled: true
   network:
     cni:
       name: flannel
+  # proxy:
+  #   disabled: false
 machine:
   type: worker
   network:
     interfaces:
-      - interface: eth1
+      - interface: eth0
         dhcp: true
   kubelet:
     extraMounts:
