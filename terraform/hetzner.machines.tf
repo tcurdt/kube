@@ -8,7 +8,7 @@ resource "hcloud_ssh_key" "talos" {
 # image
 
 data "hcloud_image" "talos" {
-  with_selector = "talos=v1.8.3"
+  with_selector = "talos=v1.9.3"
 }
 
 # network
