@@ -6,6 +6,8 @@ metadata:
   labels:
     app: caddy
 spec:
+  type: NodePort
+  externalTrafficPolicy: Local
   selector:
     app: caddy
   ports:
@@ -15,4 +17,3 @@ spec:
     - name: https
       port: 443
       nodePort: 30443
-  type: NodePort
