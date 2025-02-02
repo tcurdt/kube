@@ -4,6 +4,7 @@ resources:
   - namespace.yaml
   - configmap.yaml
   - serviceaccount.yaml
-  - rbac.yaml
+  - role.yaml
+  - rolebinding.yaml
   - deployment.yaml
-  - storageclass.yaml 
+  - storageclass.yaml
