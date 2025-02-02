@@ -3,6 +3,7 @@ cluster:
     cni:
       name: flannel
 machine:
+  type: worker
   network:
     interfaces:
       - interface: eth1
@@ -16,31 +17,3 @@ machine:
           - bind
           - rshared
           - rw
-  firewall:
-    defaultAction: block
-    rules:
-      # Allow kubelet access within cluster
-      - name: kubelet-ingress
-        portSelector:
-          ports:
-            - 10250
-          protocol: tcp
-        ingress:
-          - subnet: 10.0.0.0/16
-      # Allow NodePorts
-      - name: nodeport-ingress
-        portSelector:
-          ports:
-            - 30080
-            - 30443
-          protocol: tcp
-        ingress:
-          - subnet: 0.0.0.0/0
-      # Allow CNI VXLAN traffic between nodes
-      - name: cni-vxlan
-        portSelector:
-          ports:
-            - 4789  # For Flannel VXLAN
-          protocol: udp
-        ingress:
-          - subnet: 10.0.0.0/16
