@@ -14,8 +14,8 @@ resource "null_resource" "talos_config" {
         --output-dir .talosconfig \
         --config-patch-control-plane @config.talos/controlplane.yaml \
         --config-patch-worker @config.talos/worker.yaml \
-        --config-patch '{"machine":{"network":{"interfaces":[{"interface":"eth1","addresses":["10.0.1.${format("%d", index(local.all_nodes, each.key) + 2)}/24"],"dhcp":false}]}}}' \
-        ${local.is_single_node ? "--config-patch @config.talos/single.yaml" : ""}
+        ${local.is_single_node ? "--config-patch @config.talos/single.yaml" : ""} \
+        --config-patch '{"machine":{"network":{"interfaces":[{"interface":"eth1","addresses":["10.0.1.${format("%d", index(local.all_nodes, each.key) + 2)}/24"],"dhcp":false}]}}}' 
     EOT
   }
 }
