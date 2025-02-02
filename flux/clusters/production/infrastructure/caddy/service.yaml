@@ -6,14 +6,13 @@ metadata:
   labels:
     app: caddy
 spec:
-  type: NodePort
+  type: LoadBalancer
   externalTrafficPolicy: Local
+  # loadBalancerIP:
   selector:
     app: caddy
   ports:
     - name: http
       port: 80
-      nodePort: 30080
     - name: https
       port: 443
-      nodePort: 30443

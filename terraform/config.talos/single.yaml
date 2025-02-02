@@ -1,4 +1,6 @@
 cluster:
+  # externalCloudProvider:
+  #   enabled: true
   network:
     cni:
       name: flannel
