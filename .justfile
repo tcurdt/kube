@@ -12,6 +12,10 @@ k9s:
 talos:
     talosctl --talosconfig terraform/.talosconfig/talosconfig health
 
+ingress:
+    kubectl --kubeconfig=terraform/.kubeconfig get ingress -A
+    kubectl --kubeconfig=terraform/.kubeconfig get service -A
+
 curl:
     #!/usr/bin/env bash
     IP=$(grep server terraform/.kubeconfig | sed -e 's/.*https:\/\///' -e 's/:.*$//')
