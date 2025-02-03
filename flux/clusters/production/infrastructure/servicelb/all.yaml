@@ -53,6 +53,9 @@ spec:
             - name: sbin
               mountPath: /sbin
               readOnly: true
+            - name: lib
+              mountPath: /lib
+              readOnly: true
           env:
             - name: PATH
               value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -67,4 +70,8 @@ spec:
         - name: sbin
           hostPath:
             path: /sbin
+            type: Directory
+        - name: lib
+          hostPath:
+            path: /lib
             type: Directory
