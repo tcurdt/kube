@@ -1,14 +1,15 @@
 cluster:
+  # allowSchedulingOnControlPlanes: true
   # externalCloudProvider:
   #   enabled: true
   network:
     cni:
       name: flannel
-  proxy:
-    disabled: false
-    # image: registry.k8s.io/kube-proxy:v1.32.1
-    # extraArgs:
-    #     nodeport-addresses: 0.0.0.0/0
+  # proxy:
+  #   disabled: false
+  #   image: registry.k8s.io/kube-proxy:v1.32.1
+  #   extraArgs:
+  #       nodeport-addresses: 0.0.0.0/0
 machine:
   type: controlplane
   network:
