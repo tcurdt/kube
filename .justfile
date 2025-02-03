@@ -6,6 +6,9 @@ watch_repo:
 watch_apply:
     kubectl --kubeconfig=terraform/.kubeconfig get kustomizations -A -w
 
+find:
+    talosctl --talosconfig terraform/.talosconfig/talosconfig list /usr/lib --nodes 10.0.1.2
+
 k9s:
     k9s --kubeconfig=terraform/.kubeconfig
 
@@ -15,6 +18,9 @@ health:
 ingress:
     kubectl --kubeconfig=terraform/.kubeconfig get ingress -A
     kubectl --kubeconfig=terraform/.kubeconfig get service -A
+
+    talosctl --talosconfig terraform/.talosconfig/talosconfig get addresses -n 10.0.1.3
+    talosctl --talosconfig terraform/.talosconfig/talosconfig netstat -lt -n 10.0.1.3
 
 pull:
     # kubectl --kubeconfig=terraform/.kubeconfig run pull --image=ghcr.io/tcurdt/talos-servicelb:latest --rm -i
@@ -31,8 +37,14 @@ curl:
     #!/usr/bin/env bash
     IP=$(grep server terraform/.kubeconfig | sed -e 's/.*https:\/\///' -e 's/:.*$//')
     echo $IP
-    curl -I http://$IP:30080 || true
-    curl -I https://$IP:30443 || true
+
+    curl -I http://$IP:80 || echo "http failed for $IP"
+    curl -I https://$IP:443 || echo "https failed for $IP"
+
+    # IP="159.69.52.101"
+    # set -x
+    # curl -I http://$IP:80 || echo "http failed for $IP"
+    # curl -I https://$IP:443 || echo "https failed for $IP"
 
 reconcile:
     flux --kubeconfig=terraform/.kubeconfig reconcile kustomization flux-system
