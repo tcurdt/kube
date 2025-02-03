@@ -8,18 +8,32 @@ metadata:
 spec:
   selector:
     app: caddy
+
   type: NodePort
   externalIPs:
     - 159.69.52.101
   ports:
-    - port: 80
-      name: http
+    - name: http
+      port: 80
       targetPort: 80
       protocol: TCP
-    - port: 443
-      name: https
+    - name: https
+      port: 443
       targetPort: 443
       protocol: TCP
+
+  # type: NodePort
+  # externalIPs:
+  #   - 159.69.52.101
+  # ports:
+  #   - port: 80
+  #     name: http
+  #     targetPort: 80
+  #     protocol: TCP
+  #   - port: 443
+  #     name: https
+  #     targetPort: 443
+  #     protocol: TCP
 
   # type: LoadBalancer
   # externalTrafficPolicy: Local
