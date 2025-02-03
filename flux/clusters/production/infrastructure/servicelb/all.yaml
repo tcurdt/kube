@@ -50,9 +50,6 @@ spec:
             capabilities:
               add: ["NET_ADMIN", "NET_RAW"]
           volumeMounts:
-            - name: nft
-              mountPath: /sbin/nft
-              readOnly: true
             - name: iptables
               mountPath: /sbin/iptables-nft
               readOnly: true
@@ -64,10 +61,6 @@ spec:
               cpu: 50m
               memory: 64Mi
       volumes:
-        - name: nft
-          hostPath:
-            path: /sbin/nft
-            type: File
         - name: iptables
           hostPath:
             path: /sbin/iptables-nft
