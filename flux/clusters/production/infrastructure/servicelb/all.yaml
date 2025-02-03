@@ -56,12 +56,9 @@ spec:
             - name: lib
               mountPath: /lib
               readOnly: true
-            - name: usrlib
-              mountPath: /usr/lib
+            - name: modules
+              mountPath: /lib/modules
               readOnly: true
-          # env:
-          #   - name: PATH
-          #     value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
           resources:
             limits:
               cpu: 100m
@@ -78,7 +75,7 @@ spec:
           hostPath:
             path: /lib
             type: Directory
-        - name: usrlib
+        - name: modules
           hostPath:
-            path: /usr/lib
+            path: /lib/modules
             type: Directory
