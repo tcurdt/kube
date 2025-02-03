@@ -13,7 +13,7 @@ machine:
   type: controlplane
   network:
     interfaces:
-      - interface: eth0
+      - interface: enp1s0
         dhcp: true
   kubelet:
     extraMounts:
