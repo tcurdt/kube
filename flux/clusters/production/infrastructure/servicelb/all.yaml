@@ -56,9 +56,6 @@ spec:
             - name: lib
               mountPath: /lib
               readOnly: true
-            - name: modules
-              mountPath: /lib/modules
-              readOnly: true
           resources:
             limits:
               cpu: 100m
@@ -74,8 +71,4 @@ spec:
         - name: lib
           hostPath:
             path: /lib
-            type: Directory
-        - name: modules
-          hostPath:
-            path: /lib/modules
             type: Directory
