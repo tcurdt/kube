@@ -47,6 +47,13 @@ spec:
           image: ghcr.io/tcurdt/talos-servicelb:latest
           securityContext:
             privileged: true
+          volumeMounts:
+            - name: nft
+              mountPath: /sbin/nft
+              readOnly: true
+            - name: iptables
+              mountPath: /sbin/iptables-nft
+              readOnly: true
           resources:
             limits:
               cpu: 100m
@@ -54,3 +61,12 @@ spec:
             requests:
               cpu: 50m
               memory: 64Mi
+      volumes:
+        - name: nft
+          hostPath:
+            path: /sbin/nft
+            type: File
+        - name: iptables
+          hostPath:
+            path: /sbin/iptables-nft
+            type: File
