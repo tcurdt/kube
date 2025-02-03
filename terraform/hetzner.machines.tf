@@ -57,6 +57,16 @@ resource "hcloud_server" "machine" {
   # }
 }
 
+# resource "hcloud_floating_ip" "control_plane" {
+#   for_each = toset(var.control_plane_nodes)
+#   name      = var.prefix != "" ? "${var.prefix}-${each.key}-floating" : "${each.key}-floating"
+#   type      = "ipv4"
+#   server_id = hcloud_server.machine[each.key].id
+#   # lifecycle {
+#   #   prevent_destroy = true
+#   # }
+# }
+
 output "nodes" {
   value = {
     for key in local.all_nodes : key => {
@@ -64,6 +74,7 @@ output "nodes" {
       public_ip4 = hcloud_server.machine[key].ipv4_address
       public_ip6 = hcloud_server.machine[key].ipv6_address
       private_ip = [for n in hcloud_server.machine[key].network : n.ip][0]
+      # floating_ip = contains(var.control_plane_nodes, key) ? hcloud_floating_ip.control_plane[key].ip_address : null
     }
   }
 }
