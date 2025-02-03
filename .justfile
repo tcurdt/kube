@@ -16,6 +16,13 @@ ingress:
     kubectl --kubeconfig=terraform/.kubeconfig get ingress -A
     kubectl --kubeconfig=terraform/.kubeconfig get service -A
 
+pull:
+    # kubectl --kubeconfig=terraform/.kubeconfig run pull --image=ghcr.io/tcurdt/talos-servicelb:latest --rm -i
+    # kubectl --kubeconfig=terraform/.kubeconfig set image daemonset/talos-lb-controller controller=ghcr.io/tcurdt/talos-servicelb:latest -n kube-system
+    kubectl --kubeconfig=terraform/.kubeconfig delete pod -n kube-system -l app=talos-lb-controller
+
+images:
+    kubectl --kubeconfig=terraform/.kubeconfig get pods -A -o jsonpath='{range .items[*].status.containerStatuses[*]}{.image}{"\t"}{.imageID}{"\n"}{end}' | sort | uniq
 
 lb:
     kubectl --kubeconfig=terraform/.kubeconfig -n kube-system logs daemonset.apps/talos-lb-controller
