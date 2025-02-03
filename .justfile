@@ -36,13 +36,14 @@ lb:
 curl:
     #!/usr/bin/env bash
     IP=$(grep server terraform/.kubeconfig | sed -e 's/.*https:\/\///' -e 's/:.*$//')
-    echo $IP
+
+    # talosctl --talosconfig terraform/.talosconfig/talosconfig netstat -tnlp -n 10.0.1.2 -n 10.0.1.3 | grep $IP
 
     set -x
     curl -I http://$IP:80 || true
-    curl -I --insecure -H "Host: talos.vafer.work" https://$IP:443 || true
     curl -I --insecure --resolve talos.vafer.work:443:$IP https://talos.vafer.work || true
-    openssl s_client -connect $IP:443
+    # openssl s_client -connect $IP:443
+    # curl -I --insecure -H "Host: talos.vafer.work" https://$IP:443 || true
 
 
 reconcile:
