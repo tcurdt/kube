@@ -38,13 +38,12 @@ curl:
     IP=$(grep server terraform/.kubeconfig | sed -e 's/.*https:\/\///' -e 's/:.*$//')
     echo $IP
 
-    curl -I http://$IP:80 || echo "http failed for $IP"
-    curl -I https://$IP:443 || echo "https failed for $IP"
+    set -x
+    curl -I http://$IP:80 || true
+    curl -I --insecure -H "Host: talos.vafer.work" https://$IP:443 || true
+    curl -I --insecure --resolve talos.vafer.work:443:$IP https://talos.vafer.work || true
+    openssl s_client -connect $IP:443
 
-    # IP="159.69.52.101"
-    # set -x
-    # curl -I http://$IP:80 || echo "http failed for $IP"
-    # curl -I https://$IP:443 || echo "https failed for $IP"
 
 reconcile:
     flux --kubeconfig=terraform/.kubeconfig reconcile kustomization flux-system
