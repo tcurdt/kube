@@ -6,13 +6,24 @@ metadata:
   labels:
     app: caddy
 spec:
-  type: LoadBalancer
-  externalTrafficPolicy: Local
-  # loadBalancerIP:
-  selector:
-    app: caddy
+  type: NodePort
+  externalIPs:
+    - 159.69.52.101
   ports:
-    - name: http
-      port: 80
-    - name: https
-      port: 443
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+    - port: 443
+      targetPort: 443
+      protocol: TCP
+
+  # type: LoadBalancer
+  # externalTrafficPolicy: Local
+  # # loadBalancerIP:
+  # selector:
+  #   app: caddy
+  # ports:
+  #   - name: http
+  #     port: 80
+  #   - name: https
+  #     port: 443
