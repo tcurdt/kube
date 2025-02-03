@@ -47,6 +47,8 @@ spec:
           image: ghcr.io/tcurdt/talos-servicelb:latest
           securityContext:
             privileged: true
+            capabilities:
+              add: ["NET_ADMIN", "NET_RAW"]
           volumeMounts:
             - name: nft
               mountPath: /sbin/nft
