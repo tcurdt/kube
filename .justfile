@@ -16,6 +16,10 @@ ingress:
     kubectl --kubeconfig=terraform/.kubeconfig get ingress -A
     kubectl --kubeconfig=terraform/.kubeconfig get service -A
 
+
+lb:
+    kubectl --kubeconfig=terraform/.kubeconfig -n kube-system logs daemonset.apps/talos-lb-controller
+
 curl:
     #!/usr/bin/env bash
     IP=$(grep server terraform/.kubeconfig | sed -e 's/.*https:\/\///' -e 's/:.*$//')
