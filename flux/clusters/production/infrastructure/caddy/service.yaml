@@ -10,9 +10,9 @@ spec:
     app: caddy
 
   type: NodePort
-  externalIPs:
-    - 138.199.151.168
-    - 159.69.52.101
+  # externalIPs:
+  #   - 138.199.151.168
+  #   - 159.69.52.101
   ports:
     - name: http
       port: 80
