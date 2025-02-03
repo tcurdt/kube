@@ -12,10 +12,10 @@ cluster:
   #       nodeport-addresses: 0.0.0.0/0
 machine:
   type: worker
-  network:
-    interfaces:
-      - interface: enp1s0
-        dhcp: true
+  # network:
+  #   interfaces:
+  #     - interface: enp1s0
+  #       dhcp: true
   kubelet:
     extraMounts:
       - destination: /var/local-path-provisioner

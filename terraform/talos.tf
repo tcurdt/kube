@@ -20,13 +20,14 @@ resource "null_resource" "talos_apply_controlplanes" {
 
   for_each = toset(var.control_plane_nodes)
 
+  # --config-patch '{"machine":{"network":{"interfaces":[{"interface":"enp7s0","addresses":["10.0.1.${format("%d", index(local.all_nodes, each.key) + 2)}/24"],"dhcp":false}]}}}' \
+
   provisioner "local-exec" {
     command = <<-EOT
       talosctl --talosconfig=.talosconfig/talosconfig \
         apply-config \
         --nodes ${hcloud_server.machine[each.key].ipv4_address} \
         --file .talosconfig/controlplane.yaml \
-        --config-patch '{"machine":{"network":{"interfaces":[{"interface":"enp7s0","addresses":["10.0.1.${format("%d", index(local.all_nodes, each.key) + 2)}/24"],"dhcp":false}]}}}' \
         --insecure
     EOT
   }
@@ -38,13 +39,14 @@ resource "null_resource" "talos_apply_workers" {
 
   for_each = toset(var.worker_nodes)
 
+  # --config-patch '{"machine":{"network":{"interfaces":[{"interface":"enp7s0","addresses":["10.0.1.${format("%d", index(local.all_nodes, each.key) + 2)}/24"],"dhcp":false}]}}}' \
+
   provisioner "local-exec" {
     command = <<-EOT
       talosctl --talosconfig=.talosconfig/talosconfig \
         apply-config \
         --nodes ${hcloud_server.machine[each.key].ipv4_address} \
         --file .talosconfig/worker.yaml \
-        --config-patch '{"machine":{"network":{"interfaces":[{"interface":"enp7s0","addresses":["10.0.1.${format("%d", index(local.all_nodes, each.key) + 2)}/24"],"dhcp":false}]}}}' \
         --insecure
     EOT
   }
