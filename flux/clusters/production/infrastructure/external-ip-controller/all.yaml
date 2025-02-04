@@ -46,8 +46,10 @@ spec:
         - name: controller
           image: ghcr.io/tcurdt/kube-external-ip-controller:latest
           securityContext:
+            privileged: true
             capabilities:
               add: ["NET_ADMIN"]
+              # add: ["NET_ADMIN", "NET_RAW"]
           resources:
             limits:
               cpu: 100m
