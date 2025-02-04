@@ -8,6 +8,6 @@ resources:
   - deployment.yaml
 configMapGenerator:
   - name: caddy
-    namespace: ingress-system
+    namespace: ingress
     files:
       - Caddyfile

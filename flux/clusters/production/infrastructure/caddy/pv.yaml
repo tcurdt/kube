@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: caddy-data-volume
-  namespace: ingress-system
+  namespace: ingress
   labels:
     app: caddy
     type: local
