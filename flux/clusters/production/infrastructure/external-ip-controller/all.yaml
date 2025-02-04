@@ -40,10 +40,14 @@ spec:
       labels:
         app: external-ip-controller
     spec:
+      hostNetwork: true
       serviceAccountName: external-ip-controller
       containers:
         - name: controller
           image: ghcr.io/tcurdt/kube-external-ip-controller:latest
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]
           resources:
             limits:
               cpu: 100m
