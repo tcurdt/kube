@@ -17,4 +17,15 @@ spec:
       - name: hello-world
         image: strm/helloworld-http
         ports:
-        - containerPort: 80 
+        - containerPort: 80
+        env:
+        - name: FOO
+          valueFrom:
+            secretKeyRef:
+              name: hello-world-secrets
+              key: FOO
+        - name: BAR
+          valueFrom:
+            secretKeyRef:
+              name: hello-world-secrets
+              key: BAR

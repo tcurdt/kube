@@ -4,4 +4,4 @@ resources:
   - namespace.yaml
   - hello-world/deployment.yaml
   - hello-world/service.yaml
-  # - hello-world/ingress.yaml
+  - hello-world/secrets.yaml
