@@ -6,7 +6,7 @@ metadata:
   labels:
     app: caddy
   annotations:
-    external-ip-interface: "enp1s0"
+    external-ip-interface: enp1s0
 spec:
   selector:
     app: caddy
