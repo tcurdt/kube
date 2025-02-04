@@ -48,8 +48,7 @@ spec:
           securityContext:
             privileged: true
             capabilities:
-              # add: ["NET_ADMIN"]
-              add: ["NET_ADMIN", "NET_RAW"]
+              add: ["NET_ADMIN", "SYS_ADMIN"]
           resources:
             limits:
               cpu: 100m
