@@ -3,5 +3,5 @@ kind: Kustomization
 resources:
   - external-ip-controller
   - local-storage
-  - csi-hetzner/helm.yaml
+  # - csi-hetzner
   - caddy
