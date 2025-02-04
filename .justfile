@@ -56,6 +56,9 @@ nodes:
     talosctl --talosconfig terraform/.talosconfig/talosconfig get links --nodes 10.0.1.3
     talosctl --talosconfig terraform/.talosconfig/talosconfig get addresses --nodes 10.0.1.3
 
+pods:
+    kubectl --kubeconfig=terraform/.kubeconfig get pods -o wide -A --sort-by='{.spec.nodeName}'
+
 all:
     kubectl --kubeconfig=terraform/.kubeconfig get all -A
 
