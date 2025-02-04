@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: infra
+  namespace: ingress-system
   name: caddy
   labels:
     app: caddy
