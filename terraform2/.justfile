@@ -25,15 +25,19 @@ init:
     tofu init
 
 plan:
-    touch .kubeconfig
     SOPS_AGE_KEY_FILE=.sops.age \
     tofu plan -var-file=.env.tfvars
 
 apply:
-    touch .kubeconfig
     SOPS_AGE_KEY_FILE=.sops.age \
     tofu apply -var-file=.env.tfvars
 
 destroy:
     SOPS_AGE_KEY_FILE=.sops.age \
     tofu destroy -var-file=.env.tfvars
+
+kube:
+    kubectl --kubeconfig .configs/a/kubeconfig get all -A
+
+talos:
+    talosctl --talosconfig .configs/a/talosconfig health

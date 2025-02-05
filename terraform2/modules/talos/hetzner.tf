@@ -6,14 +6,17 @@ resource "hcloud_ssh_key" "talos" {
 resource "hcloud_network" "talos" {
   name     = "talos-network"
   ip_range = "10.0.0.0/16"
+  # lifecycle {
+  #   create_before_destroy = true
+  # }
 }
 
-# resource "hcloud_network_subnet" "talos" {
-#   network_id   = hcloud_network.network.id
-#   type         = "cloud"
-#   network_zone = "eu-central"
-#   ip_range     = "10.0.1.0/24"
-# }
+resource "hcloud_network_subnet" "talos" {
+  network_id   = hcloud_network.talos.id
+  type         = "cloud"
+  network_zone = "eu-central"
+  ip_range     = "10.0.0.0/16"
+}
 
 resource "hcloud_firewall" "talos" {
   name = "${var.cluster_name}-firewall"

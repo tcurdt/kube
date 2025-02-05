@@ -135,3 +135,14 @@ resource "talos_cluster_kubeconfig" "this" {
   client_configuration = talos_machine_secrets.this.client_configuration
   node                 = hcloud_server.control_plane[0].ipv4_address
 }
+
+
+resource "local_file" "kubeconfig" {
+  content  = talos_cluster_kubeconfig.this.kubeconfig_raw
+  filename = "${path.module}/../../.configs/${var.cluster_name}/kubeconfig"
+}
+
+resource "local_file" "talosconfig" {
+  content  = data.talos_client_configuration.this.talos_config
+  filename = "${path.module}/../../.configs/${var.cluster_name}/talosconfig"
+}
