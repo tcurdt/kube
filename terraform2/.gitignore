@@ -1,6 +1,6 @@
-.terraform*
 .env*
 .secrets.yaml
 .sops.age
-terraform.tfstate*
 .configs
+terraform.tfstate*
+.terraform/*
