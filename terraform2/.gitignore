@@ -1,0 +1,7 @@
+.terraform*
+.env*
+.secrets.yaml
+.sops.age
+terraform.tfstate*
+.kubeconfig
+.talosconfig
