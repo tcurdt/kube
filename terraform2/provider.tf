@@ -33,3 +33,16 @@ provider "aws" {
   secret_key = var.aws_secret_key
   region     = var.aws_region
 }
+
+# provider "talos" {
+# }
+
+# provider "helm" {
+#   kubernetes {
+#     config_path = ".kubeconfig"
+#   }
+# }
+
+# provider "kubernetes" {
+#   config_path = ".kubeconfig"
+# }

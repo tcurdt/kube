@@ -33,18 +33,6 @@ variable "worker_type" {
   default     = "cpx11"
 }
 
-variable "image" {
-  type    = string
-  default = "debian-12"
-  # hcloud image list
-}
-
-# variable "kubernetes_version" {
-#   description = "Kubernetes version to install"
-#   type        = string
-#   default     = "1.28.3"
-# }
-
 variable "control_plane_patches" {
   description = "List of Talos configuration patches for control plane nodes"
   type        = list(string)
@@ -63,11 +51,10 @@ variable "worker_patches" {
 #   sensitive   = true
 # }
 
-
+# full url to the git repository
 variable "flux_repository" {
   type    = string
   default = "https://github.com/tcurdt/kube.git"
-  # full url to the git repository
 }
 
 variable "flux_branch" {

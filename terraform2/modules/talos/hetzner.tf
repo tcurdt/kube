@@ -51,11 +51,15 @@ resource "hcloud_firewall" "talos" {
   }
 }
 
+data "hcloud_image" "talos" {
+  with_selector = "talos=v1.9.3"
+}
+
 resource "hcloud_server" "control_plane" {
   count       = var.control_plane_count
   name        = "${var.cluster_name}-c-${count.index + 1}"
   server_type = var.control_plane_type
-  image       = var.image
+  image       = data.hcloud_image.talos.id
   location    = var.location
   ssh_keys    = [hcloud_ssh_key.talos.id]
 
@@ -76,7 +80,7 @@ resource "hcloud_server" "workers" {
   count       = var.worker_count
   name        = "${var.cluster_name}-w-${count.index + 1}"
   server_type = var.worker_type
-  image       = var.image
+  image       = data.hcloud_image.talos.id
   location    = var.location
   ssh_keys    = [hcloud_ssh_key.talos.id]
 

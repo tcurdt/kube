@@ -17,7 +17,7 @@ output "kubeconfig" {
   sensitive = true
 }
 
-//output "talosconfig" {
-//  value     = talos_client_configuration.this.talos_config
-//  sensitive = true
-//}
+output "talosconfig" {
+  value     = data.talos_client_configuration.this.talos_config
+  sensitive = true
+}
