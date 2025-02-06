@@ -14,12 +14,12 @@ talos-download:
 talos-upload:
     # --image-url "https://github.com/siderolabs/talos/releases/download/v1.9.3/metal-amd64.raw.zst"
     hcloud-upload-image -v upload \
-        --server-type cpx11 \
+        --server-type cpx21 \
         --image-path metal-amd64.raw.xz \
         --compression xz \
-        --labels "talos=v1.9.3"
+        --labels "talos=v1.9.3,type=cpx21"
 images:
-    hcloud image list
+    hcloud image list --output columns=id,type,labels
 
 init:
     tofu init
@@ -56,3 +56,9 @@ talos:
 
 flux:
     kubectl --kubeconfig .configs/a/kubeconfig describe pods -n flux-system
+
+watch_repo:
+    kubectl --kubeconfig .configs/a/kubeconfig get gitrepositories -A -w
+
+watch_apply:
+    kubectl --kubeconfig .configs/a/kubeconfig get kustomizations -A -w

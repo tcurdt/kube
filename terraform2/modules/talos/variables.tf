@@ -18,7 +18,7 @@ variable "worker_count" {
 variable "location" {
   description = "Hetzner location (nbg1, fsn1, hel1)"
   type        = string
-  default     = "fsn1"
+  default     = "nbg1"
 }
 
 variable "control_plane_type" {

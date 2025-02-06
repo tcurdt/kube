@@ -1,3 +1,7 @@
+data "hcloud_image" "talos" {
+  with_selector = "talos=v1.9.3,type=cpx21"
+}
+
 resource "talos_machine_secrets" "this" {
   // talos_version = "v1.9.3"
 }

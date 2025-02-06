@@ -54,10 +54,6 @@ resource "hcloud_firewall" "talos" {
   }
 }
 
-data "hcloud_image" "talos" {
-  with_selector = "talos=v1.9.3"
-}
-
 resource "hcloud_server" "control_plane" {
   count       = var.control_plane_count
   name        = "${var.cluster_name}-c-${count.index + 1}"
