@@ -6,9 +6,9 @@ resource "hcloud_ssh_key" "talos" {
 resource "hcloud_network" "talos" {
   name     = "talos-network"
   ip_range = "10.0.0.0/16"
-  # lifecycle {
-  #   create_before_destroy = true
-  # }
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "hcloud_network_subnet" "talos" {
