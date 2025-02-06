@@ -1,0 +1,10 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: demo
+  namespace: demo
+spec:
+  name: demo
+  owner: demo
+  cluster:
+    name: edkimo
