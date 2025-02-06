@@ -6,4 +6,4 @@ spec:
   name: demo
   # owner: app
   cluster:
-    name: live
+    name: edkimo
