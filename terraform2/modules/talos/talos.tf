@@ -32,6 +32,19 @@ data "talos_machine_configuration" "control_plane" {
       }
     }),
 
+    # var.worker_count == 0 ? yamlencode({
+    #   machine = {
+    #     nodeLabels = {
+    #       "node-role.kubernetes.io/control-plane" = ""
+    #     }
+    #     kubelet = {
+    #       extraArgs = {
+    #         "node-labels" = "node-role.kubernetes.io/control-plane="
+    #       }
+    #     }
+    #   }
+    # }) : null,
+
   ])
   docs     = false
   examples = false
@@ -134,9 +147,7 @@ resource "talos_machine_configuration_apply" "worker" {
 }
 
 resource "talos_machine_bootstrap" "this" {
-  depends_on = [
-    hcloud_server.control_plane
-  ]
+  depends_on           = [hcloud_server.control_plane]
   client_configuration = talos_machine_secrets.this.client_configuration
   endpoint             = hcloud_server.control_plane[0].ipv4_address
   node                 = hcloud_server.control_plane[0].ipv4_address
@@ -144,27 +155,34 @@ resource "talos_machine_bootstrap" "this" {
 
 
 resource "talos_cluster_kubeconfig" "this" {
-  depends_on = [
-    talos_machine_bootstrap.this
-  ]
+  depends_on           = [talos_machine_bootstrap.this]
   client_configuration = talos_machine_secrets.this.client_configuration
   node                 = hcloud_server.control_plane[0].ipv4_address
 }
 
+resource "kubernetes_config_map" "cluster_ready" {
+  depends_on = [talos_cluster_kubeconfig.this]
+
+  metadata {
+    name      = "cluster-ready"
+    namespace = "kube-system"
+  }
+
+  data = {
+    "ready" = "true"
+  }
+}
+
 # write out the access keys
-#
+
 resource "local_file" "talosconfig" {
-  depends_on = [
-    talos_machine_bootstrap.this
-  ]
-  content  = data.talos_client_configuration.this.talos_config
-  filename = "${path.module}/../../.configs/${var.cluster_name}/talosconfig"
+  depends_on = [talos_machine_bootstrap.this]
+  content    = data.talos_client_configuration.this.talos_config
+  filename   = "${path.module}/../../.configs/${var.cluster_name}/talosconfig"
 }
 
 resource "local_file" "kubeconfig" {
-  depends_on = [
-    talos_cluster_kubeconfig.this
-  ]
-  content  = talos_cluster_kubeconfig.this.kubeconfig_raw
-  filename = "${path.module}/../../.configs/${var.cluster_name}/kubeconfig"
+  depends_on = [talos_cluster_kubeconfig.this]
+  content    = talos_cluster_kubeconfig.this.kubeconfig_raw
+  filename   = "${path.module}/../../.configs/${var.cluster_name}/kubeconfig"
 }

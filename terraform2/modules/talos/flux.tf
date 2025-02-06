@@ -1,10 +1,10 @@
+
 resource "kubernetes_namespace" "flux" {
-  depends_on = [talos_cluster_kubeconfig.this]
+  depends_on = [kubernetes_config_map.cluster_ready]
 
   metadata {
     name = "flux-system"
   }
-
 }
 
 resource "kubernetes_secret" "sops_age" {
@@ -53,9 +53,7 @@ resource "helm_release" "flux_instance" {
   chart      = "flux-instance"
   timeout    = 300
 
-  values = [
-    file("config.flux/components.yaml")
-  ]
+  values = [file("${path.module}/flux.components.yaml")]
 
   # sops
 

@@ -36,8 +36,23 @@ destroy:
     SOPS_AGE_KEY_FILE=.sops.age \
     tofu destroy -var-file=.env.tfvars
 
-kube:
+top:
+    kubectl --kubeconfig .configs/a/kubeconfig top pods -A
+
+k9s:
+    k9s --kubeconfig .configs/a/kubeconfig
+
+nodes:
+    kubectl --kubeconfig .configs/a/kubeconfig get nodes -o wide
+
+all:
     kubectl --kubeconfig .configs/a/kubeconfig get all -A
 
+# kubectl --kubeconfig .configs/a/kubeconfig describe node
+# kubectl --kubeconfig .configs/a/kubeconfig get pods --all-namespaces | grep Pending | awk '{print $2 " -n " $1}' | xargs -L1 kubectl describe pod
+
 talos:
-    talosctl --talosconfig .configs/a/talosconfig health
+    talosctl --talosconfig .configs/a/talosconfig health --nodes 10.0.1.2
+
+flux:
+    kubectl --kubeconfig .configs/a/kubeconfig describe pods -n flux-system
