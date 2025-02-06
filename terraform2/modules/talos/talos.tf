@@ -174,6 +174,7 @@ resource "kubernetes_job" "cluster_ready_test" {
   }
 
   spec {
+    ttl_seconds_after_finished = 100
     template {
       metadata {}
       spec {
