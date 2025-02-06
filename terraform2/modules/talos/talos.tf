@@ -146,8 +146,9 @@ resource "talos_machine_configuration_apply" "worker" {
   count                       = length(hcloud_server.worker)
   client_configuration        = talos_machine_secrets.this.client_configuration
   machine_configuration_input = data.talos_machine_configuration.worker.machine_configuration
-  endpoint                    = hcloud_server.control_plane[0].ipv4_address
-  node                        = hcloud_server.worker[count.index].ipv4_address
+  // endpoint                    = hcloud_server.control_plane[0].ipv4_address
+  endpoint = hcloud_server.worker[count.index].ipv4_address
+  node     = hcloud_server.worker[count.index].ipv4_address
 }
 
 resource "talos_machine_bootstrap" "this" {
