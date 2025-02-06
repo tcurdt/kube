@@ -3,12 +3,9 @@ data "hcloud_image" "talos" {
 }
 
 resource "talos_machine_secrets" "this" {
-  // talos_version = "v1.9.3"
 }
 
 data "talos_machine_configuration" "control_plane" {
-  # talos_version      = "v1.9.3"
-  # kubernetes_version = var.kubernetes_version
   cluster_name     = var.cluster_name
   cluster_endpoint = "https://${hcloud_server.control_plane[0].ipv4_address}:6443"
   machine_type     = "controlplane"
@@ -55,8 +52,6 @@ data "talos_machine_configuration" "control_plane" {
 }
 
 data "talos_machine_configuration" "worker" {
-  # talos_version      = "v1.9.3"
-  # kubernetes_version = var.kubernetes_version
   cluster_name     = var.cluster_name
   cluster_endpoint = "https://${hcloud_server.control_plane[0].ipv4_address}:6443"
   machine_type     = "worker"
@@ -165,37 +160,30 @@ resource "talos_cluster_kubeconfig" "this" {
   node                 = hcloud_server.control_plane[0].ipv4_address
 }
 
-resource "kubernetes_job" "cluster_ready_test" {
+resource "null_resource" "wait_for_cluster" {
   depends_on = [talos_cluster_kubeconfig.this]
 
-  metadata {
-    name      = "cluster-ready-test"
-    namespace = "kube-system"
-  }
+  provisioner "local-exec" {
+    command = <<-EOT
+      timeout=300
+      counter=0
+      export KUBECONFIG=${base64decode(talos_cluster_kubeconfig.this.kubeconfig_raw)}
 
-  spec {
-    ttl_seconds_after_finished = 100
-    template {
-      metadata {}
-      spec {
-        container {
-          name    = "test"
-          image   = "busybox"
-          command = ["sh", "-c", "echo 'Cluster is ready!'"]
-        }
-        restart_policy = "Never"
-      }
-    }
-  }
-
-  wait_for_completion = true
-  timeouts {
-    create = "5m"
+      until kubectl wait --for=condition=Ready pods --all -n kube-system --timeout=30s > /dev/null 2>&1; do
+        counter=$((counter + 30))
+        if [ $counter -gt $timeout ]; then
+          echo "kube not ready - timeout"
+          exit 1
+        fi
+        echo "waiting for kube..."
+        sleep 30
+      done
+    EOT
   }
 }
 
 resource "kubernetes_config_map" "cluster_ready" {
-  depends_on = [kubernetes_job.cluster_ready_test]
+  depends_on = [null_resource.wait_for_cluster]
 
   metadata {
     name      = "cluster-ready"
