@@ -6,6 +6,7 @@ instance:
     - notification-controller
     - image-reflector-controller
     - image-automation-controller
+    - external-secrets-controller
   kustomize:
     patches:
       - target:
