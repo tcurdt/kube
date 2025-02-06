@@ -2,7 +2,7 @@ module "cluster_a" {
   source              = "./modules/talos"
   cluster_name        = "a"
   control_plane_count = 1
-  worker_count        = 0
+  worker_count        = 1
   flux_repository     = "https://github.com/tcurdt/kube.git"
 }
 

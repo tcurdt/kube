@@ -1,0 +1,9 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: edkimo-live
+spec:
+  name: edkimo-live
+  # owner: app
+  cluster:
+    name: live

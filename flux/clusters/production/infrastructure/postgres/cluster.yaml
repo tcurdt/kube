@@ -1,0 +1,110 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: edkimo
+  namespace: database
+  # labels:
+spec:
+  instances: 1
+  # description: "Example of cluster"
+  # imageName: ghcr.io/cloudnative-pg/postgresql:17.2
+  # imagePullSecret is only required if the images are located in a private registry
+  # imagePullSecrets:
+  #   - name: private_registry_access
+  # startDelay: 300
+  # stopDelay: 300
+  primaryUpdateStrategy: unsupervised
+
+  # postgresql:
+  #   parameters:
+  #     shared_buffers: 256MB
+  #     pg_stat_statements.max: "10000"
+  #     pg_stat_statements.track: all
+  #     auto_explain.log_min_duration: "10s"
+  #     cron.database_name: "racefeed-db"
+  #     cron.use_background_workers: "on"
+  #     ssl_max_protocol_version: TLSv1.3
+  #     ssl_min_protocol_version: TLSv1.2
+  #     max_connections: "20"
+  #     effective_cache_size: "3072MB"
+  #     maintenance_work_mem: "256MB"
+  #     checkpoint_completion_target: "0.9"
+  #     wal_buffers: "16MB"
+  #     default_statistics_target: "100"
+  #     random_page_cost: "1.1"
+  #     effective_io_concurrency: "300"
+  #     work_mem: "26214kB"
+  #     huge_pages: "off"
+  #     min_wal_size: "1GB"
+  #     max_wal_size: "4GB"
+  #   pg_hba:
+  #     - host all all 10.244.0.0/16 md5
+  #   shared_preload_libraries:
+  #     - pg_cron
+
+  # bootstrap:
+  #   initdb:
+  #     database: app
+  #     owner: app
+  #     secret:
+  #       name: cluster-example-app-user
+  #   recovery:
+  #    backup:
+  #      name: backup-example
+
+  enableSuperuserAccess: true
+  # superuserSecret:
+  #   name: cluster-example-superuser
+
+  storage:
+    size: 1Gi
+    # storageClass: standard
+    # pvcTemplate:
+    #   accessModes:
+    #     - ReadWriteOnce
+    #   resources:
+    #     requests:
+    #       storage: 1Gi
+    #   storageClassName: standard
+    #   volumeMode: Filesystem
+
+  # backup:
+  #   barmanObjectStore:
+  #     destinationPath: s3://cluster-example-full-backup/
+  #     endpointURL: http://custom-endpoint:1234
+  #     s3Credentials:
+  #       accessKeyId:
+  #         name: backup-creds
+  #         key: ACCESS_KEY_ID
+  #       secretAccessKey:
+  #         name: backup-creds
+  #         key: ACCESS_SECRET_KEY
+  #     wal:
+  #       compression: gzip
+  #       maxParallel: 4
+  #       encryption: AES256
+  #     data:
+  #       compression: gzip
+  #       encryption: AES256
+  #       immediateCheckpoint: false
+  #       jobs: 2
+  #   retentionPolicy: "14d"
+
+  # monitoring:
+  #   enablePodMonitor: false
+
+  # resources:
+  #   requests:
+  #     memory: "512Mi"
+  #     cpu: "1"
+  #   limits:
+  #     memory: "1Gi"
+  #     cpu: "2"
+
+  # affinity:
+  #   enablePodAntiAffinity: true
+  #   topologyKey: failure-domain.beta.kubernetes.io/zone
+
+  # nodeMaintenanceWindow:
+  #   inProgress: false
+  #   reusePVC: false

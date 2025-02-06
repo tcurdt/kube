@@ -7,13 +7,13 @@ metadata:
     kubernetes.io/ingress.class: "caddy"
 spec:
   rules:
-  - host: hello-world.example.com  # Replace with your actual domain
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: hello-world
-            port:
-              number: 80 
+    - host: hello-world.example.com # Replace with your actual domain
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: hello-world
+                port:
+                  number: 80
