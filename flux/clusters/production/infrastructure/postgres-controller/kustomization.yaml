@@ -4,5 +4,3 @@ resources:
   - namespace.yaml
   - repo.yaml
   - helm.yaml
-  - cluster.yaml
-  # - backup.yaml
