@@ -44,8 +44,23 @@ resource "helm_release" "flux_operator" {
   wait       = true
 }
 
+# resource "helm_release" "external_secrets" {
+#   depends_on = [kubernetes_namespace.flux]
+
+#   name       = "external-secrets"
+#   namespace  = "flux-system"
+#   repository = "oci://ghcr.io/controlplaneio-fluxcd/charts"
+#   chart      = "external-secrets"
+#   wait       = true
+# }
+
 resource "helm_release" "flux_instance" {
-  depends_on = [helm_release.flux_operator, kubernetes_secret.flux_git, kubernetes_secret.sops_age]
+  depends_on = [
+    # helm_release.external_secrets,
+    helm_release.flux_operator,
+    kubernetes_secret.flux_git,
+    kubernetes_secret.sops_age
+  ]
 
   name       = "flux"
   namespace  = "flux-system"
