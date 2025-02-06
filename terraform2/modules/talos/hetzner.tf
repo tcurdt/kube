@@ -79,7 +79,7 @@ resource "hcloud_server" "control_plane" {
   }
 }
 
-resource "hcloud_server" "workers" {
+resource "hcloud_server" "worker" {
   count       = var.worker_count
   name        = "${var.cluster_name}-w-${count.index + 1}"
   server_type = var.worker_type

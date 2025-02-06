@@ -7,8 +7,8 @@ output "control_planes" {
 
 output "workers" {
   value = {
-    public_ips  = hcloud_server.workers[*].ipv4_address
-    private_ips = [for server in hcloud_server.workers : tolist(server.network)[0].ip]
+    public_ips  = hcloud_server.worker[*].ipv4_address
+    private_ips = [for server in hcloud_server.worker : tolist(server.network)[0].ip]
   }
 }
 

@@ -2,7 +2,7 @@ resource "talos_machine_secrets" "this" {
   // talos_version = "v1.9.3"
 }
 
-data "talos_machine_configuration" "controlplane" {
+data "talos_machine_configuration" "control_plane" {
   # talos_version      = "v1.9.3"
   # kubernetes_version = var.kubernetes_version
   cluster_name     = var.cluster_name
@@ -117,20 +117,20 @@ data "talos_client_configuration" "this" {
   endpoints            = hcloud_server.control_plane[*].ipv4_address
 }
 
-resource "talos_machine_configuration_apply" "controlplane" {
+resource "talos_machine_configuration_apply" "control_plane" {
   count                       = length(hcloud_server.control_plane)
   client_configuration        = talos_machine_secrets.this.client_configuration
-  machine_configuration_input = data.talos_machine_configuration.controlplane.machine_configuration
-  node                        = hcloud_server.control_plane[count.index].ipv4_address
+  machine_configuration_input = data.talos_machine_configuration.control_plane.machine_configuration
   endpoint                    = hcloud_server.control_plane[0].ipv4_address
+  node                        = hcloud_server.control_plane[count.index].ipv4_address
 }
 
 resource "talos_machine_configuration_apply" "worker" {
-  count                       = length(hcloud_server.workers)
+  count                       = length(hcloud_server.worker)
   client_configuration        = talos_machine_secrets.this.client_configuration
   machine_configuration_input = data.talos_machine_configuration.worker.machine_configuration
-  node                        = hcloud_server.workers[count.index].ipv4_address
   endpoint                    = hcloud_server.control_plane[0].ipv4_address
+  node                        = hcloud_server.worker[count.index].ipv4_address
 }
 
 resource "talos_machine_bootstrap" "this" {
@@ -151,13 +151,20 @@ resource "talos_cluster_kubeconfig" "this" {
   node                 = hcloud_server.control_plane[0].ipv4_address
 }
 
-
-resource "local_file" "kubeconfig" {
-  content  = talos_cluster_kubeconfig.this.kubeconfig_raw
-  filename = "${path.module}/../../.configs/${var.cluster_name}/kubeconfig"
-}
-
+# write out the access keys
+#
 resource "local_file" "talosconfig" {
+  depends_on = [
+    talos_machine_bootstrap.this
+  ]
   content  = data.talos_client_configuration.this.talos_config
   filename = "${path.module}/../../.configs/${var.cluster_name}/talosconfig"
+}
+
+resource "local_file" "kubeconfig" {
+  depends_on = [
+    talos_cluster_kubeconfig.this
+  ]
+  content  = talos_cluster_kubeconfig.this.kubeconfig_raw
+  filename = "${path.module}/../../.configs/${var.cluster_name}/kubeconfig"
 }
