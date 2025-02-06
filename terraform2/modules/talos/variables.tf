@@ -24,13 +24,13 @@ variable "location" {
 variable "control_plane_type" {
   description = "Server type for control plane nodes"
   type        = string
-  default     = "cpx11"
+  default     = "cpx21"
 }
 
 variable "worker_type" {
   description = "Server type for worker nodes"
   type        = string
-  default     = "cpx11"
+  default     = "cpx21"
 }
 
 variable "control_plane_patches" {
