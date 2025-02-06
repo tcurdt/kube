@@ -48,6 +48,12 @@ nodes:
 all:
     kubectl --kubeconfig .configs/a/kubeconfig get all -A
 
+crds:
+    kubectl --kubeconfig .configs/a/kubeconfig get crds
+
+postgres:
+    kubectl --kubeconfig .configs/a/kubeconfig cnpg status edkimo -n demo
+
 # kubectl --kubeconfig .configs/a/kubeconfig describe node
 # kubectl --kubeconfig .configs/a/kubeconfig get pods --all-namespaces | grep Pending | awk '{print $2 " -n " $1}' | xargs -L1 kubectl describe pod
 
