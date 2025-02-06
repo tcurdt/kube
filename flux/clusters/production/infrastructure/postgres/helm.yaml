@@ -1,4 +1,4 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: cloudnative-pg
@@ -14,25 +14,27 @@ spec:
         name: cloudnative-pg
         namespace: database
       interval: 60m
-  # values:
-  #   image:
-  #     repository: ghcr.io/cloudnative-pg/cloudnative-pg
-  #     pullPolicy: IfNotPresent
-  #     tag: "1.26.0"
-  #   controllerManager:
-  #     create: true
-  #     watchNamespace: ""
-  #     logLevel: info
-  #     resources:
-  #       limits:
-  #         cpu: 200m
-  #         memory: 256Mi
-  #       requests:
-  #         cpu: 100m
-  #         memory: 128Mi
-  #   serviceAccount:
-  #     create: true
-  #   rbac:
-  #     create: true
-  #   webhook:
-  #     create: true
+  values:
+    # image:
+    #   repository: ghcr.io/cloudnative-pg/cloudnative-pg
+    #   pullPolicy: IfNotPresent
+    #   tag: "1.26.0"
+    # controllerManager:
+    #   create: true
+    #   watchNamespace: ""
+    #   logLevel: info
+    #   resources:
+    #     limits:
+    #       cpu: 200m
+    #       memory: 256Mi
+    #     requests:
+    #       cpu: 100m
+    #       memory: 128Mi
+    # crds:
+    #   create: true
+    # serviceAccount:
+    #   create: true
+    # rbac:
+    #   create: true
+    # webhook:
+    #   create: true
