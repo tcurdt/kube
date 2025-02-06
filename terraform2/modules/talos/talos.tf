@@ -165,8 +165,36 @@ resource "talos_cluster_kubeconfig" "this" {
   node                 = hcloud_server.control_plane[0].ipv4_address
 }
 
-resource "kubernetes_config_map" "cluster_ready" {
+resource "kubernetes_job" "cluster_ready_test" {
   depends_on = [talos_cluster_kubeconfig.this]
+
+  metadata {
+    name      = "cluster-ready-test"
+    namespace = "kube-system"
+  }
+
+  spec {
+    template {
+      metadata {}
+      spec {
+        container {
+          name    = "test"
+          image   = "busybox"
+          command = ["sh", "-c", "echo 'Cluster is ready!'"]
+        }
+        restart_policy = "Never"
+      }
+    }
+  }
+
+  wait_for_completion = true
+  timeouts {
+    create = "5m"
+  }
+}
+
+resource "kubernetes_config_map" "cluster_ready" {
+  depends_on = [kubernetes_job.cluster_ready_test]
 
   metadata {
     name      = "cluster-ready"
