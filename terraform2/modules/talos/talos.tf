@@ -117,6 +117,21 @@ data "talos_client_configuration" "this" {
   endpoints            = hcloud_server.control_plane[*].ipv4_address
 }
 
+resource "talos_machine_configuration_apply" "controlplane" {
+  count                       = length(hcloud_server.control_plane)
+  client_configuration        = talos_machine_secrets.this.client_configuration
+  machine_configuration_input = data.talos_machine_configuration.controlplane.machine_configuration
+  node                        = hcloud_server.control_plane[count.index].ipv4_address
+  endpoint                    = hcloud_server.control_plane[0].ipv4_address
+}
+
+resource "talos_machine_configuration_apply" "worker" {
+  count                       = length(hcloud_server.workers)
+  client_configuration        = talos_machine_secrets.this.client_configuration
+  machine_configuration_input = data.talos_machine_configuration.worker.machine_configuration
+  node                        = hcloud_server.workers[count.index].ipv4_address
+  endpoint                    = hcloud_server.control_plane[0].ipv4_address
+}
 
 resource "talos_machine_bootstrap" "this" {
   depends_on = [
