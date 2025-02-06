@@ -1,14 +1,20 @@
-apiVersion: helm.cattle.io/v1
-kind: HelmChart
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
 metadata:
   name: cloudnative-pg
   namespace: database
 spec:
-  repo: https://cloudnative-pg.github.io/charts
-  chart: cloudnative-pg
-  version: 0.23.0
-  targetNamespace: database
-  # valuesContent: |-
+  interval: 60m
+  chart:
+    spec:
+      chart: cloudnative-pg
+      version: "0.23.0"
+      sourceRef:
+        kind: HelmRepository
+        name: cloudnative-pg
+        namespace: database
+      interval: 60m
+  # values:
   #   image:
   #     repository: ghcr.io/cloudnative-pg/cloudnative-pg
   #     pullPolicy: IfNotPresent
