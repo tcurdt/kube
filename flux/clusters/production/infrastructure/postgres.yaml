@@ -1,0 +1,21 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: postgres-controller
+  namespace: database
+spec:
+  path: ./postgres-controller
+  # prune: true
+  wait: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: postgres-cluster
+  namespace: database
+spec:
+  dependsOn:
+    - name: postgres-controller
+  path: ./postgres-cluster
+  # prune: true

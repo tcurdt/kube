@@ -4,6 +4,7 @@ resources:
   - external-ip-controller
   - local-storage
   # - csi-hetzner
-  - postgres-controller
-  - postgres-cluster
+  # - postgres-controller
+  # - postgres-cluster
+  - postgres.yaml
   - caddy
