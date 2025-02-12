@@ -6,9 +6,9 @@ resource "hcloud_ssh_key" "talos" {
 resource "hcloud_network" "talos" {
   name     = "talos-network"
   ip_range = "10.0.0.0/16"
-  lifecycle {
-    create_before_destroy = true
-  }
+  # lifecycle {
+  #   create_before_destroy = true
+  # }
 }
 
 resource "hcloud_network_subnet" "talos" {
@@ -55,6 +55,10 @@ resource "hcloud_firewall" "talos" {
 }
 
 resource "hcloud_server" "control_plane" {
+  depends_on = [
+    hcloud_network_subnet.talos
+  ]
+
   count       = var.control_plane_count
   name        = "${var.cluster_name}-c-${count.index + 1}"
   server_type = var.control_plane_type
@@ -76,6 +80,10 @@ resource "hcloud_server" "control_plane" {
 }
 
 resource "hcloud_server" "worker" {
+  depends_on = [
+    hcloud_network_subnet.talos
+  ]
+
   count       = var.worker_count
   name        = "${var.cluster_name}-w-${count.index + 1}"
   server_type = var.worker_type

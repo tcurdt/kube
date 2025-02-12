@@ -1,6 +1,7 @@
 
 resource "kubernetes_namespace" "flux" {
-  depends_on = [kubernetes_config_map.cluster_ready]
+  # depends_on = [kubernetes_config_map.cluster_ready]
+  depends_on = [talos_cluster_kubeconfig.this]
 
   metadata {
     name = "flux-system"
