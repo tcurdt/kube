@@ -160,30 +160,30 @@ resource "talos_cluster_kubeconfig" "this" {
   node                 = hcloud_server.control_plane[0].ipv4_address
 }
 
-resource "null_resource" "wait_for_cluster" {
-  depends_on = [talos_cluster_kubeconfig.this]
+# resource "null_resource" "wait_for_cluster" {
+#   depends_on = [talos_cluster_kubeconfig.this]
 
-  provisioner "local-exec" {
-    command = <<-EOT
-      timeout=300
-      counter=0
-      export KUBECONFIG=${base64decode(talos_cluster_kubeconfig.this.kubeconfig_raw)}
+#   provisioner "local-exec" {
+#     command = <<-EOT
+#       timeout=300
+#       counter=0
+#       export KUBECONFIG=${base64decode(talos_cluster_kubeconfig.this.kubeconfig_raw)}
 
-      until kubectl wait --for=condition=Ready pods --all -n kube-system --timeout=30s > /dev/null 2>&1; do
-        counter=$((counter + 30))
-        if [ $counter -gt $timeout ]; then
-          echo "kube not ready - timeout"
-          exit 1
-        fi
-        echo "waiting for kube..."
-        sleep 30
-      done
-    EOT
-  }
-}
+#       until kubectl wait --for=condition=Ready pods --all -n kube-system --timeout=30s > /dev/null 2>&1; do
+#         counter=$((counter + 30))
+#         if [ $counter -gt $timeout ]; then
+#           echo "kube not ready - timeout"
+#           exit 1
+#         fi
+#         echo "waiting for kube..."
+#         sleep 30
+#       done
+#     EOT
+#   }
+# }
 
 resource "kubernetes_config_map" "cluster_ready" {
-  depends_on = [null_resource.wait_for_cluster]
+  // depends_on = [null_resource.wait_for_cluster]
 
   metadata {
     name      = "cluster-ready"
