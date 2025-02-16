@@ -14,6 +14,15 @@ spec:
         name: cloudnative-pg
         namespace: database
       interval: 60m
+  # install:
+  #   crds: Create
+  # upgrade:
+  #   crds: CreateReplace
+  # values:
+  #   crds:
+  #     create: true
+  #   operator:
+  #     create: false
   # values:
   #   image:
   #     repository: ghcr.io/cloudnative-pg/cloudnative-pg
