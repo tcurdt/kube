@@ -1,4 +1,3 @@
----
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -14,18 +13,3 @@ spec:
   wait: true
   dependsOn:
     - name: local-storage
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: postgres-cluster
-  namespace: flux-system
-spec:
-  interval: 10m
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./flux/clusters/production/infrastructure/postgres-cluster
-  prune: true
-  dependsOn:
-    - name: postgres-controller

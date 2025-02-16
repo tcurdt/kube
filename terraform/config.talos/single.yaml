@@ -1,7 +1,0 @@
-machine:
-  kubelet:
-    extraArgs:
-      node-labels: "node-role.kubernetes.io/control-plane=,node-role.kubernetes.io/worker="
-    nodeIP:
-      validSubnets:
-        - "10.0.1.0/24"
