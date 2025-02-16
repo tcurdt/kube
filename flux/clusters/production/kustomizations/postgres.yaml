@@ -9,11 +9,11 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+  path: ../infrastructure/postgres-controller
+  prune: false
+  wait: true
   dependsOn:
     - name: local-storage
-  path: ../infrastructure/postgres-controller
-  wait: true
-  prune: false
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -25,7 +25,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  dependsOn:
-    - name: postgres-controller
   path: ../infrastructure/postgres-cluster
   prune: true
+  dependsOn:
+    - name: postgres-controller

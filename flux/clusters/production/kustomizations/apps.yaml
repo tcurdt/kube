@@ -10,5 +10,6 @@ spec:
     kind: GitRepository
     name: flux-system
   path: ../apps/hello-world
+  prune: true
   dependsOn:
     - name: postgres-cluster
