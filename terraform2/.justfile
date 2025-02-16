@@ -49,7 +49,10 @@ all:
     kubectl --kubeconfig .configs/a/kubeconfig get all -A
 
 crds:
-    kubectl --kubeconfig .configs/a/kubeconfig get crds
+    kubectl --kubeconfig .configs/a/kubeconfig get crds -A
+
+ks:
+    kubectl --kubeconfig .configs/a/kubeconfig get ks -A
 
 postgres:
     kubectl --kubeconfig .configs/a/kubeconfig cnpg status edkimo -n demo
