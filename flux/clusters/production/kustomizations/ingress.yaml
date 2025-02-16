@@ -9,7 +9,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ../infrastructure/external-ip-controller
+  path: ./flux/clusters/production/infrastructure/external-ip-controller
   prune: true
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -22,7 +22,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ../infrastructure/caddy
+  path: ./flux/clusters/production/infrastructure/caddy
   prune: true
   dependsOn:
     - name: external-ip-controller

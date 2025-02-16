@@ -9,7 +9,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ../apps/hello-world
+  path: ./flux/clusters/production/apps/hello-world
   prune: true
   dependsOn:
     - name: postgres-cluster

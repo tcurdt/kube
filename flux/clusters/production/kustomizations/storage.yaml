@@ -9,6 +9,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ../infrastructure/local-storage
+  path: ./flux/clusters/production/infrastructure/local-storage
   prune: false
   wait: true
