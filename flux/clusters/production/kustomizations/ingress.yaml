@@ -13,6 +13,10 @@ metadata:
   name: caddy
   namespace: flux-system
 spec:
+  interval: 10m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
   dependsOn:
     - name: external-ip-controller
   path: ../infrastructure/caddy

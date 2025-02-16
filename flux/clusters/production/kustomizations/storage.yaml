@@ -5,6 +5,10 @@ metadata:
   name: local-storage
   namespace: flux-system
 spec:
+  interval: 10m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
   path: ../infrastructure/local-storage
   wait: true
   prune: false

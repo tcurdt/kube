@@ -5,6 +5,10 @@ metadata:
   name: hello-world
   namespace: flux-system
 spec:
+  interval: 10m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
   path: ../apps/hello-world
   dependsOn:
     - name: postgres-cluster

@@ -5,6 +5,10 @@ metadata:
   name: postgres-controller
   namespace: flux-system
 spec:
+  interval: 10m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
   dependsOn:
     - name: local-storage
   path: ../infrastructure/postgres-controller
@@ -17,6 +21,10 @@ metadata:
   name: postgres-cluster
   namespace: flux-system
 spec:
+  interval: 10m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
   dependsOn:
     - name: postgres-controller
   path: ../infrastructure/postgres-cluster
