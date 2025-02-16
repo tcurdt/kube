@@ -1,15 +1,12 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: postgres-controller
+  name: external-ip-controller
   namespace: flux-system
 spec:
   interval: 10m
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./flux/clusters/production/infrastructure/postgres-controller
-  prune: false
-  wait: true
-  dependsOn:
-    - name: local-storage
+  path: ./flux/clusters/blue/infrastructure/external-ip-controller
+  prune: true

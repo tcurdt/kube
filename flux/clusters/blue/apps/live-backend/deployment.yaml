@@ -1,26 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-world
-  namespace: demo
+  name: backend
+  namespace: live
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: hello-world
+      app: backend
   template:
     metadata:
       labels:
-        app: hello-world
+        app: backend
     spec:
       containers:
-        - name: hello-world
+        - name: backend
           image: strm/helloworld-http
           ports:
             - containerPort: 80
           env:
+            # TODO add postgres credentials
+            # TODO add public.url
             - name: FOO
               valueFrom:
                 secretKeyRef:
-                  name: hello-world-secrets
+                  name: backend-secrets
                   key: FOO

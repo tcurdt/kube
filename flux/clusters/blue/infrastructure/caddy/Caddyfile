@@ -8,10 +8,10 @@
   # acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
 }
 
-talos.vafer.work {
+live.vafer.work {
   tls internal
   # tls { issuer acme }
 
   header -server
-  reverse_proxy http://hello-world.demo.svc.cluster.local:80
+  reverse_proxy http://backend.live.svc.cluster.local:80
 }

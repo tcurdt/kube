@@ -8,7 +8,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./flux/clusters/production/infrastructure/postgres-cluster
+  path: ./flux/clusters/blue/infrastructure/postgres-cluster
   prune: true
   dependsOn:
     - name: postgres-controller
