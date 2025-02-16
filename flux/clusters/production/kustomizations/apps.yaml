@@ -1,0 +1,10 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: hello-world
+  namespace: flux-system
+spec:
+  path: ../apps/hello-world
+  dependsOn:
+    - name: postgres-cluster

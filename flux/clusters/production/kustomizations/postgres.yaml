@@ -5,9 +5,11 @@ metadata:
   name: postgres-controller
   namespace: flux-system
 spec:
-  path: ./postgres-controller
-  # prune: true
+  dependsOn:
+    - name: local-storage
+  path: ../infrastructure/postgres-controller
   wait: true
+  prune: false
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -17,5 +19,5 @@ metadata:
 spec:
   dependsOn:
     - name: postgres-controller
-  path: ./postgres-cluster
-  # prune: true
+  path: ../infrastructure/postgres-cluster
+  prune: true
