@@ -62,7 +62,6 @@ variable "flux_branch" {
   default = "main"
 }
 
-variable "flux_path" {
-  type    = string
-  default = "./flux/clusters/production/kustomizations"
-}
+# variable "flux_path" {
+#   type = string
+# }

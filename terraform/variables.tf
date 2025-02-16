@@ -43,7 +43,7 @@ variable "aws_region" {
 
 # variable "flux_path" {
 #   type    = string
-#   default = "./flux/clusters/production"
+#   default = "./flux/clusters/blue"
 # }
 
 # s3

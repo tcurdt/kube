@@ -109,7 +109,7 @@ resource "helm_release" "flux_instance" {
 
   set {
     name  = "instance.sync.path"
-    value = var.flux_path
+    value = "./flux/clusters/${var.cluster_name}/kustomizations"
   }
 
   set {
@@ -128,6 +128,6 @@ output "flux_status" {
     namespace = kubernetes_namespace.flux.metadata[0].name
     git_url   = var.flux_repository
     branch    = var.flux_branch
-    path      = var.flux_path
+    path      = "./flux/clusters/${var.cluster_name}/kustomizations"
   }
 }
