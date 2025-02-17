@@ -21,8 +21,8 @@ spec:
           env:
             # TODO add postgres credentials
             # TODO add public.url
-            - name: FOO
+            - name: BREVO_SECRET
               valueFrom:
                 secretKeyRef:
                   name: sops-secrets
-                  key: FOO
+                  key: live.brevo.secret
