@@ -6,9 +6,6 @@ resource "hcloud_ssh_key" "talos" {
 resource "hcloud_network" "talos" {
   name     = "talos-network"
   ip_range = "10.0.0.0/16"
-  # lifecycle {
-  #   create_before_destroy = true
-  # }
 }
 
 resource "hcloud_network_subnet" "talos" {
@@ -40,17 +37,19 @@ resource "hcloud_firewall" "talos" {
   }
 
   rule {
-    direction  = "in"
-    protocol   = "tcp"
-    port       = "any"
-    source_ips = ["10.0.0.0/8"]
+    direction   = "in"
+    protocol    = "tcp"
+    port        = "80"
+    source_ips  = ["0.0.0.0/0"]
+    description = "HTTP"
   }
 
   rule {
-    direction  = "in"
-    protocol   = "udp"
-    port       = "any"
-    source_ips = ["10.0.0.0/8"]
+    direction   = "in"
+    protocol    = "tcp"
+    port        = "443"
+    source_ips  = ["0.0.0.0/0"]
+    description = "HTTPS"
   }
 }
 
