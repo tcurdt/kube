@@ -41,8 +41,9 @@ curl:
 
     set -x
     curl -I http://$IP:80 || true
-    curl -I --insecure --resolve talos.vafer.work:443:$IP https://talos.vafer.work || true
+    curl -I --insecure --resolve talos.vafer.work:443:$IP https://live.vafer.work || true
     # openssl s_client -connect $IP:443
+    # openssl s_client -connect $IP:443 -servername live.vafer.work -no-CAfile
     # curl -I --insecure -H "Host: talos.vafer.work" https://$IP:443 || true
 
 
