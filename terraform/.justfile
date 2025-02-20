@@ -1,5 +1,8 @@
 set dotenv-load
 
+source:
+    echo "export KUBECONFIG=$KUBECONFIG"
+
 sops:
     SOPS_AGE_KEY_FILE=.sops.age \
     sops -e .secrets.yaml > secrets.enc.yaml
@@ -37,40 +40,52 @@ destroy:
     tofu destroy -var-file=.env.tfvars
 
 top:
-    kubectl --kubeconfig .configs/a/kubeconfig top pods -A
+    kubectl top pods -A
 
 k9s:
     k9s --kubeconfig .configs/a/kubeconfig
 
 nodes:
-    kubectl --kubeconfig .configs/a/kubeconfig get nodes -o wide
+    kubectl get nodes -o wide
 
 all:
-    kubectl --kubeconfig .configs/a/kubeconfig get all -A
+    kubectl get all -A
 
 crds:
-    kubectl --kubeconfig .configs/a/kubeconfig get crds -A
+    kubectl get crds -A
 
 ks:
-    kubectl --kubeconfig .configs/a/kubeconfig get ks -A
+    kubectl get ks -A
 
 secrets:
-    kubectl --kubeconfig .configs/a/kubeconfig get secrets -A
+    kubectl get secrets -A
 
 postgres:
-    kubectl --kubeconfig .configs/a/kubeconfig cnpg status edkimo -n demo
+    kubectl cnpg status edkimo -n demo
 
-# kubectl --kubeconfig .configs/a/kubeconfig describe node
-# kubectl --kubeconfig .configs/a/kubeconfig get pods --all-namespaces | grep Pending | awk '{print $2 " -n " $1}' | xargs -L1 kubectl describe pod
+# kubectl describe node
+# kubectl get pods --all-namespaces | grep Pending | awk '{print $2 " -n " $1}' | xargs -L1 kubectl describe pod
 
 talos:
     talosctl --talosconfig .configs/a/talosconfig health --nodes 10.0.1.2
 
 flux:
-    kubectl --kubeconfig .configs/a/kubeconfig describe pods -n flux-system
+    kubectl describe pods -n flux-system
 
 watch_repo:
-    kubectl --kubeconfig .configs/a/kubeconfig get gitrepositories -A -w
+    kubectl get gitrepositories -A -w
 
 watch_apply:
-    kubectl --kubeconfig .configs/a/kubeconfig get kustomizations -A -w
+    kubectl get kustomizations -A -w
+
+curl:
+    #!/usr/bin/env bash
+    IP=$(grep server $KUBECONFIG | sed -e 's/.*https:\/\///' -e 's/:.*$//')
+
+    set -x
+    curl -I http://$IP:80 || true
+    curl -I --insecure --resolve live.vafer.work:443:$IP https://live.vafer.work || true
+
+    # openssl s_client -connect $IP:443
+    # openssl s_client -connect $IP:443 -servername live.vafer.work -no-CAfile
+    # curl -I --insecure -H "Host: talos.vafer.work" https://$IP:443 || true
