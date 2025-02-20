@@ -160,41 +160,6 @@ resource "talos_cluster_kubeconfig" "this" {
   node                 = hcloud_server.control_plane[0].ipv4_address
 }
 
-# resource "null_resource" "wait_for_cluster" {
-#   depends_on = [talos_cluster_kubeconfig.this]
-
-#   provisioner "local-exec" {
-#     command = <<-EOT
-#       timeout=300
-#       counter=0
-#       export KUBECONFIG=${base64decode(talos_cluster_kubeconfig.this.kubeconfig_raw)}
-
-#       until kubectl wait --for=condition=Ready pods --all -n kube-system --timeout=30s > /dev/null 2>&1; do
-#         counter=$((counter + 30))
-#         if [ $counter -gt $timeout ]; then
-#           echo "kube not ready - timeout"
-#           exit 1
-#         fi
-#         echo "waiting for kube..."
-#         sleep 30
-#       done
-#     EOT
-#   }
-# }
-
-resource "kubernetes_config_map" "cluster_ready" {
-  // depends_on = [null_resource.wait_for_cluster]
-
-  metadata {
-    name      = "cluster-ready"
-    namespace = "kube-system"
-  }
-
-  data = {
-    "ready" = "true"
-  }
-}
-
 # write out the access keys
 
 resource "local_file" "talosconfig" {
@@ -207,4 +172,41 @@ resource "local_file" "kubeconfig" {
   depends_on = [talos_cluster_kubeconfig.this]
   content    = talos_cluster_kubeconfig.this.kubeconfig_raw
   filename   = "${path.module}/../../.configs/${var.cluster_name}/kubeconfig"
+}
+
+resource "null_resource" "wait_for_cluster" {
+  depends_on = [local_file.kubeconfig]
+
+  provisioner "local-exec" {
+    environment = {
+      KUBECONFIG = "${path.module}/../../.configs/${var.cluster_name}/kubeconfig"
+    }
+    command = <<-EOT
+      timeout=300
+      counter=0
+      echo $KUBECONFIG
+      until kubectl wait --for=condition=Ready pods --all -n kube-system --timeout=30s; do
+        counter=$((counter + 30))
+        if [ $counter -gt $timeout ]; then
+          echo "kube not ready - timeout"
+          exit 1
+        fi
+        echo "waiting for kube..."
+        sleep 30
+      done
+    EOT
+  }
+}
+
+resource "kubernetes_config_map" "cluster_ready" {
+  depends_on = [null_resource.wait_for_cluster]
+
+  metadata {
+    name      = "cluster-ready"
+    namespace = "kube-system"
+  }
+
+  data = {
+    "ready" = "true"
+  }
 }
