@@ -30,7 +30,7 @@ plan:
 
 apply:
     SOPS_AGE_KEY_FILE=.sops.age \
-    tofu apply -var-file=.env.tfvars
+    tofu apply -auto-approve -var-file=.env.tfvars
 
 destroy:
     SOPS_AGE_KEY_FILE=.sops.age \
