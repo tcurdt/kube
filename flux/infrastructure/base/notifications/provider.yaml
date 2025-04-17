@@ -1,0 +1,11 @@
+apiVersion: notification.toolkit.fluxcd.io/v1beta2
+kind: Provider
+metadata:
+  name: mattermost
+  namespace: flux-system
+spec:
+  type: mattermost
+  channel: my-flux-channel
+  # address: https://mattermost.example.com/hooks/xxx-your-webhook-id-xxx
+  secretRef:
+    name: mattermost-url

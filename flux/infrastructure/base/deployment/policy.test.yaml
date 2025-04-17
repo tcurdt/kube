@@ -1,0 +1,13 @@
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: policy-test
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: backend-repository
+  filterTags:
+    pattern: "^branch-test-(?P<ts>[0-9]+)$"
+  policy:
+    numerical:
+      order: asc

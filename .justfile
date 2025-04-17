@@ -1,5 +1,13 @@
 set dotenv-load
 
+
+
+
+
+
+
+
+
 watch_repo:
     kubectl --kubeconfig=terraform/.kubeconfig get gitrepositories -A -w
 

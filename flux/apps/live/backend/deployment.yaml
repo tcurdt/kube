@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: live
+  # annotations:
+  #   fluxcd.io/automated: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      # imagePullSecrets:
+      #   - name: oci-github
+      containers:
+        - name: backend
+          # image: ghcr.io/edkimo/backend:branch-live
+          image: strm/helloworld-http
+          ports:
+            - containerPort: 80
+          envFrom:
+            - secretRef:
+                name: dotenv
+          env:
+            # <cluster-name>-app - Contains credentials for the default application user
+            # <cluster-name>-superuser - Contains credentials for the PostgreSQL superuser
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: edkimo-live
+                  key: uri

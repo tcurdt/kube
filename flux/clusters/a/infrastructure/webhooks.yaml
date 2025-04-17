@@ -1,6 +1,0 @@
-apiVersion: admissionregistration.k8s.io/v1
-kind: ValidatingWebhookConfiguration
-webhooks:
-  # TODO: what is this for?
-  - name: my-webhook.example.com
-    sideEffects: None

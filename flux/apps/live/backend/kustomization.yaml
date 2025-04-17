@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - database.yaml
+  - deployment.yaml
+  - namespace.yaml
+  - service.yaml
+  - ../../../infrastructure/base/deployment/policy.live.yaml
+  - ../../../../secrets/enc.oci.github.yaml
+secretGenerator:
+  - name: dotenv
+    envs:
+      - ../../../../secrets/enc.env.live

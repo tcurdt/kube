@@ -1,0 +1,15 @@
+{
+  email "tcurdt@vafer.org"
+  admin :2019
+  metrics
+  # debug
+  # acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+}
+
+live.vafer.work {
+  tls internal
+  # tls { issuer acme }
+
+  header -server
+  reverse_proxy http://backend.live.svc.cluster.local:80
+}

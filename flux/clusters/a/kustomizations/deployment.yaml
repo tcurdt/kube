@@ -1,13 +1,12 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: local-storage
+  name: deployment-repository
   namespace: flux-system
 spec:
   interval: 10m
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./flux/infrastructure/base/local-storage
-  prune: false
-  wait: true
+  path: ./flux/infrastructure/base/deployment/repository.yaml
+  prune: true
