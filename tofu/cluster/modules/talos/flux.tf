@@ -18,24 +18,8 @@ resource "kubernetes_secret" "sops_age" {
 }
 
 # github
-# data "sops_file" "secrets" {
-#   source_file = "../../secrets/enc.flux.github.yaml"
-# }
-# resource "kubernetes_secret" "flux_github" {
-#   depends_on = [kubernetes_namespace.flux]
-#   metadata {
-#     name      = "flux-system"
-#     namespace = "flux-system"
-#   }
-#   data = {
-#     "username" = "git"
-#     "password" = data.sops_file.secrets.data["flux.github.fine_pat_token"]
-#   }
-# }
-
-# github app
 data "sops_file" "secrets" {
-  source_file = "../../secrets/enc.flux.githubapp.yaml"
+  source_file = "../../secrets/enc.flux.github.yaml"
 }
 resource "kubernetes_secret" "flux_github" {
   depends_on = [kubernetes_namespace.flux]
@@ -44,11 +28,27 @@ resource "kubernetes_secret" "flux_github" {
     namespace = "flux-system"
   }
   data = {
-    "githubAppID"             = data.sops_file.secrets.data["stringData.githubAppID"]
-    "githubAppInstallationID" = data.sops_file.secrets.data["stringData.githubAppInstallationID"]
-    "githubAppPrivateKey"     = data.sops_file.secrets.data["stringData.githubAppPrivateKey"]
+    "username" = "git"
+    "password" = data.sops_file.secrets.data["flux.github.fine_pat_token"]
   }
 }
+
+# github app
+# data "sops_file" "secrets" {
+#   source_file = "../../secrets/enc.flux.githubapp.yaml"
+# }
+# resource "kubernetes_secret" "flux_github" {
+#   depends_on = [kubernetes_namespace.flux]
+#   metadata {
+#     name      = "flux-system"
+#     namespace = "flux-system"
+#   }
+#   data = {
+#     "githubAppID"             = data.sops_file.secrets.data["stringData.githubAppID"]
+#     "githubAppInstallationID" = data.sops_file.secrets.data["stringData.githubAppInstallationID"]
+#     "githubAppPrivateKey"     = data.sops_file.secrets.data["stringData.githubAppPrivateKey"]
+#   }
+# }
 
 
 resource "helm_release" "flux_operator" {
