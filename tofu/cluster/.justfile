@@ -39,17 +39,18 @@ destroy:
 # source:
 #     echo "export KUBECONFIG=$KUBECONFIG"
 
-top:
-    kubectl top pods -A
-
-k9s:
-    k9s --kubeconfig .configs/a/kubeconfig
 
 nodes:
     kubectl get nodes -o wide
 
 all:
     kubectl get all -A
+
+k9s:
+    k9s --kubeconfig .configs/a/kubeconfig
+
+# top:
+#     kubectl top pods -A
 
 crds:
     kubectl get crds -A
