@@ -21,17 +21,17 @@ jobs:
       #     sudo apt-get install -y yq
 
       - name: Install yq
-        uses: jaxxstorm/action-install-gh-release@v1.10.0
+        uses: jaxxstorm/action-install-gh-release@v1.14.0
         with:
           repo: mikefarah/yq
 
       - name: Install kustomize
-        uses: jaxxstorm/action-install-gh-release@v1.10.0
+        uses: jaxxstorm/action-install-gh-release@v1.14.0
         with:
           repo: kubernetes-sigs/kustomize
 
       - name: Install kubeconform
-        uses: jaxxstorm/action-install-gh-release@v1.10.0
+        uses: jaxxstorm/action-install-gh-release@v1.14.0
         with:
           repo: yannh/kubeconform
 
