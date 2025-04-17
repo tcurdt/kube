@@ -19,7 +19,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y yq kustomize kubeconform
+
+      - name: Versions
+        run: |
+          yq --version
+          kustomize version
+          kubeconform -v
+
       - name: Verify
         run: |
           cd flux
-          bash scripts/verify.sh
+          bash scripts/validate.sh
