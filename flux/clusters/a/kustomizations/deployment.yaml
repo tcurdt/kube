@@ -8,5 +8,5 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./flux/infrastructure/base/deployment/repository.yaml
+  path: ./flux/infrastructure/base/deployment
   prune: true
