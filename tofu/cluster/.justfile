@@ -1,5 +1,9 @@
 set dotenv-load
 
+# list targets
+help:
+  @just --list
+
 # download talos release
 talos-download:
     wget https://github.com/siderolabs/talos/releases/download/v1.9.3/metal-amd64.raw.zst
