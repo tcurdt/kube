@@ -33,7 +33,7 @@ rotate:
     flux create secret githubapp flux-system \
       --app-id=1219184 \
       --app-installation-id=64688608 \
-      --app-private-key=./edkimo-deployment.2025-04-16.private-key.pem \
+      --app-private-key=./.edkimo-deployment.2025-04-16.private-key.pem \
       --export > .flux.githubapp.yaml
 
     kubectl create secret docker-registry oci-github \
