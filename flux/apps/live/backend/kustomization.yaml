@@ -6,8 +6,3 @@ resources:
   - namespace.yaml
   - service.yaml
   - ../../../infrastructure/base/deployment/policy.live.yaml
-  - ../../../../secrets/enc.oci.github.yaml
-secretGenerator:
-  - name: dotenv
-    envs:
-      - ../../../../secrets/enc.env.live
