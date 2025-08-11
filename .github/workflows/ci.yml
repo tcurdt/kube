@@ -42,7 +42,7 @@ jobs:
           kubeconform -v
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Verify
         run: |
